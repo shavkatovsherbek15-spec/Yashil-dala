@@ -1,0 +1,70 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import csrf_field %}
+{% block title %}Ma’lumotnoma{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1>Ma’lumotnoma</h1>
+    <p class="sub">Ekinlar, muammolar va kategoriyalar — “Muammo bo‘yicha tanlash” shu ro‘yxatlardan quriladi.</p>
+  </div>
+</div>
+
+<div class="grid-2">
+  <section class="card box" id="ekinlar">
+    <div class="box-head">
+      <h2>Ekinlar</h2>
+      <a href="/admin/ekinlar/yangi" class="btn btn-ghost btn-sm">Ekin qo‘shish</a>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Nomi</th><th>Muammolar</th></tr></thead>
+        <tbody>
+          {% for c in crops %}
+          <tr>
+            <td class="nowrap"><span class="dot" style="background: {{ c.color }}; display: inline-block; margin-right: 8px"></span><a href="/admin/ekinlar/{{ c.id }}">{{ c.name_uz }}</a></td>
+            <td class="muted">{{ c.problems|map(attribute='name_uz')|join(', ') or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card box" id="muammolar">
+    <div class="box-head">
+      <h2>Muammolar</h2>
+      <a href="/admin/muammolar/yangi" class="btn btn-ghost btn-sm">Muammo qo‘shish</a>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Nomi</th><th>Turi</th></tr></thead>
+        <tbody>
+          {% for p in problems %}
+          <tr>
+            <td><a href="/admin/muammolar/{{ p.id }}">{{ p.name_uz }}</a> <span class="muted">/ {{ p.name_ru }}</span></td>
+            <td class="nowrap">{{ problem_types[p.type] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<section class="card box" id="kategoriyalar" style="margin-top: 20px">
+  <h2>Kategoriyalar</h2>
+  {% for c in categories %}
+  <form method="post" action="/admin/kategoriya/{{ c.id }}" class="form-grid cols-3" style="padding: 12px 0; border-top: 1px solid var(--divider)">
+    {{ csrf_field(csrf) }}
+    <div class="field"><label>Nomi <span class="lang-tag">UZ</span></label><input class="input" name="name_uz" value="{{ c.name_uz }}" required></div>
+    <div class="field"><label>Nomi <span class="lang-tag">RU</span></label><input class="input" name="name_ru" value="{{ c.name_ru }}" required></div>
+    <div class="field"><label>Qisqa nomi <span class="lang-tag">UZ / RU</span></label>
+      <div style="display: flex; gap: 8px"><input class="input" name="short_uz" value="{{ c.short_uz }}" aria-label="Qisqa nomi UZ"><input class="input" name="short_ru" value="{{ c.short_ru }}" aria-label="Qisqa nomi RU"></div>
+    </div>
+    <div class="field"><label>Tavsif <span class="lang-tag">UZ</span></label><input class="input" name="description_uz" value="{{ c.description_uz }}"></div>
+    <div class="field"><label>Tavsif <span class="lang-tag">RU</span></label><input class="input" name="description_ru" value="{{ c.description_ru }}"></div>
+    <div class="field" style="justify-content: flex-end"><button type="submit" class="btn btn-ghost btn-sm">Saqlash</button></div>
+  </form>
+  {% endfor %}
+</section>
+{% endblock %}

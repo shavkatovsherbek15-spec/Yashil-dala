@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% from "partials/icons.html" import icon %}
+{% block title %}Kirish{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <form class="card login-card" action="/admin/kirish" method="post">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="next" value="{{ next }}">
+    <a href="/" class="logo" style="align-self: flex-start">
+      <span class="logo-mark">{{ icon('leaf', 20, 2) }}</span>
+      <span class="logo-text">{{ settings.shop_name }}</span>
+    </a>
+    <h1>Admin panelga kirish</h1>
+    {% if error %}<p class="alert" role="alert">{{ error }}</p>{% endif %}
+    <div class="field">
+      <label for="username">Login</label>
+      <input id="username" class="input" name="username" value="{{ username or '' }}" autocomplete="username" required autofocus>
+    </div>
+    <div class="field">
+      <label for="password">Parol</label>
+      <input id="password" class="input" type="password" name="password" autocomplete="current-password" required>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Kirish</button>
+  </form>
+</div>
+{% endblock %}

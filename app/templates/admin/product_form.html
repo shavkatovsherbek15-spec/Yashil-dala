@@ -1,0 +1,195 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import csrf_field %}
+{% block title %}{{ product.name_uz if product else 'Yangi mahsulot' }}{% endblock %}
+{% block content %}
+{% set d = form.data %}
+{% macro text(name, label, hint='', type='text', required=false) -%}
+<div class="field">
+  <label for="f-{{ name }}">{{ label|safe }}{% if hint %} <small class="hint">{{ hint }}</small>{% endif %}</label>
+  <input id="f-{{ name }}" class="input" type="{{ type }}" name="{{ name }}" value="{{ d[name] }}"{% if required %} required{% endif %}>
+</div>
+{%- endmacro %}
+{% macro area(name, label, rows=4, hint='') -%}
+<div class="field">
+  <label for="f-{{ name }}">{{ label|safe }}{% if hint %} <small class="hint">{{ hint }}</small>{% endif %}</label>
+  <textarea id="f-{{ name }}" class="input" name="{{ name }}" rows="{{ rows }}">{{ d[name] }}</textarea>
+</div>
+{%- endmacro %}
+
+<div class="admin-head">
+  <div>
+    <h1>{{ product.name_uz if product else 'Yangi mahsulot' }}</h1>
+    {% if product %}<p class="sub">ID {{ product.id }}{% if product.is_active %} · <a href="/mahsulot/{{ product.slug }}" target="_blank" rel="noopener">saytda ko‘rish</a>{% endif %}</p>{% endif %}
+  </div>
+  <a href="/admin/mahsulotlar" class="btn btn-ghost btn-sm">Ro‘yxatga qaytish</a>
+</div>
+
+{% if form.errors %}
+<ul class="errors" role="alert">{% for e in form.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+{% endif %}
+
+<form method="post" action="/admin/mahsulotlar/{{ product.id if product else 'yangi' }}">
+  {{ csrf_field(csrf) }}
+
+  <section class="card box">
+    <h2>Asosiy</h2>
+    <div class="form-grid cols-2">
+      {{ text('name_uz', 'Nomi <span class="lang-tag">UZ</span>', required=true) }}
+      {{ text('name_ru', 'Nomi <span class="lang-tag">RU</span>', 'bo‘sh bo‘lsa UZ olinadi') }}
+      <div class="field">
+        <label for="f-category">Kategoriya</label>
+        <select id="f-category" class="input" name="category_id" required>
+          <option value="">—</option>
+          {% for c in categories %}<option value="{{ c.id }}"{% if d.category_id == c.id|string %} selected{% endif %}>{{ c.name_uz }}</option>{% endfor %}
+        </select>
+      </div>
+      {{ text('slug', 'Manzil (slug)', 'bo‘sh bo‘lsa nomidan yasaladi') }}
+      {{ text('kind_uz', 'Turi <span class="lang-tag">UZ</span>', 'Insektitsid, Fungitsid…') }}
+      {{ text('kind_ru', 'Turi <span class="lang-tag">RU</span>') }}
+      {{ area('description_uz', 'Tavsif <span class="lang-tag">UZ</span>', 3) }}
+      {{ area('description_ru', 'Tavsif <span class="lang-tag">RU</span>', 3) }}
+    </div>
+  </section>
+
+  <section class="card box" style="margin-top: 16px">
+    <h2>Hujjat ma’lumotlari</h2>
+    <div class="form-grid cols-3">
+      {{ text('registration_no', 'Davlat guvohnomasi №') }}
+      {{ text('active_ingredient', 'Ta’sir moddasi', 'masalan: 200 g/l') }}
+      {{ text('manufacturer', 'Ishlab chiqaruvchi') }}
+      {{ text('waiting_days', 'Kutish muddati, kun', 'hosil yig‘ishdan oldin') }}
+      {{ text('mxik_code', 'MXIK kodi', 'onlayn to‘lov uchun') }}
+    </div>
+  </section>
+
+  <section class="card box" style="margin-top: 16px">
+    <div class="box-head">
+      <h2>Qadoqlar, narx va qoldiq</h2>
+      <span class="note">Yangi qadoq — bo‘sh qatorga yozing</span>
+    </div>
+    <input type="hidden" name="v_count" value="{{ form.variants|length }}">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Hajm</th><th class="num">Narx, so‘m</th><th class="num">Qoldiq</th><th>O‘chirish</th></tr></thead>
+        <tbody>
+          {% for v in form.variants %}
+          {% set i = loop.index0 %}
+          <tr>
+            <td>
+              <input type="hidden" name="v-{{ i }}-id" value="{{ v.id }}">
+              <input class="input" name="v-{{ i }}-pack" value="{{ v.pack_label }}" placeholder="{{ 'yangi qadoq' if not v.id else '' }}" aria-label="Hajm" style="min-width: 110px">
+            </td>
+            <td class="num"><input class="input input-num" name="v-{{ i }}-price" value="{{ v.price }}" inputmode="numeric" placeholder="[narx]" aria-label="Narx"></td>
+            <td class="num"><input class="input input-sm" name="v-{{ i }}-stock" value="{{ v.stock }}" inputmode="numeric" placeholder="0" aria-label="Qoldiq"></td>
+            <td>{% if v.id %}<label class="check"><input type="checkbox" name="v-{{ i }}-delete" value="1"{% if v.delete %} checked{% endif %}> O‘chirish</label>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card box" style="margin-top: 16px">
+    <div class="box-head">
+      <h2>Ruxsat etilgan ekinlar, muammo va doza</h2>
+    </div>
+    <p class="note">“Muammo bo‘yicha tanlash” faqat shu jadvaldan ishlaydi. Davlat guvohnomasida yozilgan ekinlarnigina kiriting. Muammo ekin ro‘yxatida bo‘lmasa, avtomatik qo‘shiladi.</p>
+    <input type="hidden" name="u_count" value="{{ form.usages|length }}">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Ekin</th><th>Muammo</th><th>Doza</th><th>Izoh</th><th>O‘chirish</th></tr></thead>
+        <tbody>
+          {% for u in form.usages %}
+          {% set i = loop.index0 %}
+          <tr>
+            <td>
+              <input type="hidden" name="u-{{ i }}-id" value="{{ u.id }}">
+              <select class="input" name="u-{{ i }}-crop" aria-label="Ekin" style="min-width: 130px">
+                <option value="">—</option>
+                {% for c in crops %}<option value="{{ c.id }}"{% if u.crop_id|string == c.id|string %} selected{% endif %}>{{ c.name_uz }}</option>{% endfor %}
+              </select>
+            </td>
+            <td>
+              <select class="input" name="u-{{ i }}-problem" aria-label="Muammo" style="min-width: 170px">
+                <option value="">—</option>
+                {% for t, label in problem_types.items() %}
+                <optgroup label="{{ label }}">
+                  {% for pr in problems if pr.type == t %}<option value="{{ pr.id }}"{% if u.problem_id|string == pr.id|string %} selected{% endif %}>{{ pr.name_uz }}</option>{% endfor %}
+                </optgroup>
+                {% endfor %}
+              </select>
+            </td>
+            <td><input class="input" name="u-{{ i }}-dose" value="{{ u.dose_text }}" placeholder="[doza]" aria-label="Doza" style="min-width: 140px"></td>
+            <td><input class="input" name="u-{{ i }}-note" value="{{ u.note }}" aria-label="Izoh" style="min-width: 120px"></td>
+            <td>{% if u.id %}<label class="check"><input type="checkbox" name="u-{{ i }}-delete" value="1"{% if u.delete %} checked{% endif %}> O‘chirish</label>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Ko‘proq qator kerak bo‘lsa — saqlang, yangi bo‘sh qatorlar paydo bo‘ladi.</p>
+  </section>
+
+  <section class="card box" style="margin-top: 16px">
+    <h2>Qo‘llash va xavfsizlik</h2>
+    <p class="note">Har bir band — alohida qatorda. Matnda <code>{days}</code> yozilsa, kutish muddati qo‘yiladi.</p>
+    <div class="form-grid cols-2">
+      {{ area('usage_uz', 'Qanday qo‘llanadi <span class="lang-tag">UZ</span>', 5) }}
+      {{ area('usage_ru', 'Qanday qo‘llanadi <span class="lang-tag">RU</span>', 5) }}
+      {{ area('safety_uz', 'Xavfsizlik <span class="lang-tag">UZ</span>', 5) }}
+      {{ area('safety_ru', 'Xavfsizlik <span class="lang-tag">RU</span>', 5) }}
+    </div>
+  </section>
+
+  <section class="card box" style="margin-top: 16px">
+    <h2>Ko‘rinish</h2>
+    <div class="form-grid cols-3">
+      <div class="field">
+        <label for="f-shape">Rasm bo‘lmaganda shakli</label>
+        <select id="f-shape" class="input" name="pack_shape">
+          {% for s in pack_shapes %}<option value="{{ s }}"{% if d.pack_shape == s %} selected{% endif %}>{{ shape_labels[s] }}</option>{% endfor %}
+        </select>
+      </div>
+      {{ text('sort', 'Tartib raqami', 'kichigi oldinda') }}
+    </div>
+    <div class="check-row">
+      <label class="check"><input type="checkbox" name="is_active" value="1"{% if d.is_active %} checked{% endif %}> Saytda ko‘rsatish</label>
+      <label class="check"><input type="checkbox" name="is_popular" value="1"{% if d.is_popular %} checked{% endif %}> Bosh sahifada (ommabop)</label>
+    </div>
+  </section>
+
+  <div class="sticky-save">
+    <button type="submit" class="btn btn-primary">Saqlash</button>
+    <a href="/admin/mahsulotlar" class="btn btn-ghost">Bekor qilish</a>
+  </div>
+</form>
+
+{% if product %}
+<section class="card box" id="rasmlar" style="margin-top: 8px">
+  <h2>Rasmlar</h2>
+  {% if product.images %}
+  <div class="thumbs">
+    {% for img in product.images %}
+    <div class="thumb">
+      <img src="{{ img.url }}" alt="">
+      {% if loop.first %}<span class="main-label">Asosiy rasm</span>{% endif %}
+      <form method="post" action="/admin/mahsulotlar/{{ product.id }}/rasm/{{ img.id }}" class="thumb-actions">
+        {{ csrf_field(csrf) }}
+        {% if not loop.first %}<button type="submit" name="action" value="main">Asosiy</button>{% endif %}
+        <button type="submit" name="action" value="delete" class="danger" onclick="return confirm('Rasm o‘chirilsinmi?')">O‘chirish</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="panel-empty">Rasm yo‘q — saytda qadoq shakli ko‘rsatiladi.</p>
+  {% endif %}
+  <form method="post" action="/admin/mahsulotlar/{{ product.id }}/rasm" enctype="multipart/form-data" class="toolbar" style="margin: 0">
+    {{ csrf_field(csrf) }}
+    <input type="file" name="image" accept="image/jpeg,image/png,image/webp" required aria-label="Rasm fayli">
+    <button type="submit" class="btn btn-ghost btn-sm">Yuklash</button>
+    <span class="note">JPG, PNG yoki WEBP, {{ settings.max_upload_mb }} MB gacha</span>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

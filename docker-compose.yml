@@ -19,6 +19,8 @@ services:
     env_file: .env
     environment:
       DATABASE_URL: postgresql+psycopg://yashil:yashil@db:5432/yashil_dala
+    volumes:
+      - media:/app/media
     ports:
       - "8000:8000"
     depends_on:
@@ -27,3 +29,4 @@ services:
 
 volumes:
   pgdata:
+  media:

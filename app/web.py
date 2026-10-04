@@ -12,6 +12,14 @@ from app.services import cart
 
 templates = Jinja2Templates(directory=Path(__file__).parent / "templates")
 
+
+def format_number(value: int | None) -> str:
+    """45000 -> "45 000" (bo'linmas probel); None/0 -> [narx]."""
+    return f"{value:,}".replace(",", "\u00a0") if value else "[narx]"
+
+
+templates.env.filters["num"] = format_number
+
 CATEGORY_STYLES = {
     # slug: (fon, matn, ikonka)
     "ogit": ("#E3EFE5", "#1E5B3A", "sprout"),

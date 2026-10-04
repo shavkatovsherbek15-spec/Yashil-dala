@@ -13,11 +13,13 @@ cp .env.example .env
 docker compose up -d db          # yoki o'zingizning PostgreSQL
 alembic upgrade head             # jadvallarni yaratish
 python -m scripts.seed           # namunaviy ma'lumotlar
-uvicorn app.main:app --reload    # http://127.0.0.1:8000
+python -m scripts.create_admin admin   # admin panel uchun login (parol so'raladi)
+uvicorn app.main:app --reload    # http://127.0.0.1:8000, admin: /admin
 ```
 
 Hammasini Docker'da: `docker compose up --build`, keyin
-`docker compose exec web python -m scripts.seed`.
+`docker compose exec web python -m scripts.seed` va
+`docker compose exec web python -m scripts.create_admin admin`.
 
 Testlar (SQLite'da, Postgres shart emas): `pytest`
 
@@ -33,6 +35,21 @@ Testlar (SQLite'da, Postgres shart emas): `pytest`
 | `/buyurtma/{id}` | Buyurtma qabul qilindi (`Tasdiq`) |
 | `/til/uz`, `/til/ru` | Tilni almashtirish (cookie) |
 | `POST /telegram/webhook` | Bot tugmalari (`Bot`) |
+| `/admin` | Admin panel (quyida) |
+
+## Admin panel (`/admin`)
+
+- **Bosh sahifa** — yangi buyurtmalar, qoldig‘i kam (≤ 5) qadoqlar, narxsiz qadoqlar soni.
+- **Buyurtmalar** — holat bo‘yicha filtr, raqam/telefon/ism bo‘yicha qidiruv; holatni o‘zgartirish
+  Telegramdagi xabarni ham yangilaydi.
+- **Mahsulotlar** — UZ/RU matnlar, guvohnoma, qadoqlar (narx, qoldiq), ekin × muammo × doza jadvali,
+  rasmlar (JPG/PNG/WEBP; turi fayl ichidan tekshiriladi). Buyurtmada bor qadoqni o‘chirib bo‘lmaydi.
+- **Narx va qoldiq** — barcha qadoqlar bitta jadvalda.
+- **Ma’lumotnoma** — ekinlar (va ularda ko‘rinadigan muammolar), muammolar, kategoriyalar.
+
+Xavfsizlik: parol scrypt bilan saqlanadi, barcha POST formalarda CSRF token, IP bo‘yicha 15 daqiqada
+5 ta noto‘g‘ri urinishdan keyin bloklanadi, 12 soat harakatsizlikdan keyin qayta kirish kerak.
+Ishlab chiqarishda `SECRET_KEY` ni almashtiring va `SESSION_HTTPS_ONLY=true` qiling.
 
 ## Tuzilma
 
@@ -48,10 +65,12 @@ app/
     orders.py        forma tekshiruvi va buyurtma yaratish
     telegram.py      bot xabari, tugmalar, holatni yangilash
   routers/           pages (sahifalar), shop (savatcha/buyurtma), telegram
+  admin/             admin panel: auth, routes, products (forma), media (rasmlar)
   templates/         Jinja2 shablonlar
   static/            css/app.css (mobile-first), js/app.js
 migrations/          Alembic
 scripts/seed.py      namunaviy ma'lumotlar
+scripts/create_admin.py  admin yaratish / parolni almashtirish
 ```
 
 ## Telegram bot

@@ -1,0 +1,55 @@
+{% from "partials/icons.html" import icon %}
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{% block title %}Admin{% endblock %} — {{ settings.shop_name }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body class="admin-body">
+{% if admin %}
+{% set nav = [
+  ('/admin', 'Bosh sahifa'),
+  ('/admin/buyurtmalar', 'Buyurtmalar'),
+  ('/admin/mahsulotlar', 'Mahsulotlar'),
+  ('/admin/narxlar', 'Narx va qoldiq'),
+  ('/admin/malumotnoma', 'Ma’lumotnoma'),
+] %}
+{% set section = current_path if current_path == '/admin' else '/admin/' ~ current_path.split('/')[2] %}
+{% set section = '/admin/malumotnoma' if section in ('/admin/ekinlar', '/admin/muammolar') else section %}
+<header class="admin-top">
+  <div class="container">
+    <a href="/admin" class="admin-brand">
+      <span class="logo-mark">{{ icon('leaf', 18, 2) }}</span>
+      <span>{{ settings.shop_name }} <small>admin</small></span>
+    </a>
+    <nav class="admin-nav" aria-label="Admin menyu">
+      {% for href, label in nav %}
+      <a href="{{ href }}"{% if section == href %} aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="admin-user">
+      <a href="/" target="_blank" rel="noopener">Saytni ochish</a>
+      <form action="/admin/chiqish" method="post">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <button type="submit" title="{{ admin.username }}">Chiqish</button>
+      </form>
+    </div>
+  </div>
+</header>
+{% endif %}
+
+<main class="{{ 'admin-main' if admin else '' }}">
+  <div class="container">
+    {% if flash %}<p class="flash {{ flash[0] }}" role="status">{{ flash[1] }}</p>{% endif %}
+    {% block content %}{% endblock %}
+  </div>
+</main>
+</body>
+</html>

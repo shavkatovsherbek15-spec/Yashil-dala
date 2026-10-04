@@ -60,6 +60,7 @@ O‘zbekcha (lotin) va ruscha, har sahifada UZ/RU almashtirgich. Matnlar alohida
 - Backend: **FastAPI + PostgreSQL** (foydalanuvchi backendni yaxshi biladi).
 - Frontend: **FastAPI + Jinja2** shablonlari (tanlangan). Sahifalar serverda chiziladi, JS faqat progressiv qulaylik uchun — sayt JS'siz ham ishlashi kerak.
 - Migratsiyalar: Alembic (`migrations/`). Testlar: pytest, SQLite'da (`tests/`).
+- Git: Claude sessiyasida bu repoga push ruxsati bo‘lmasligi mumkin — unda o‘zgarishlar git bundle qilib beriladi, foydalanuvchi o‘zi push qiladi.
 - Admin panel: mahsulot, narx, qoldiq va buyurtmalarni boshqarish.
 
 ## Ma’lumotlar bazasi (dastlabki sxema)
@@ -104,8 +105,13 @@ Bajarildi (1-bosqich):
 - Savatcha (sessiya cookie), buyurtma yaratish, Telegram xabari va holat tugmalari (webhook).
 - Namunaviy ma’lumotlar: `python -m scripts.seed`. Narx/doza/guvohnoma bo‘sh — saytda `[narx]`, `[doza]` ko‘rinadi.
 
+Bajarildi (2-bosqich) — admin panel `/admin` (`app/admin/`):
+- Kirish: `admin_users` jadvali, scrypt xesh, CSRF, urinishlar cheklovi; admin yaratish: `python -m scripts.create_admin LOGIN`.
+- Buyurtmalar (filtr, qidiruv, holat → Telegram xabari ham yangilanadi), mahsulotlar (qadoqlar, ekin×muammo×doza, rasmlar), narx va qoldiq jadvali, ma’lumotnoma (ekin, muammo, kategoriya).
+- Qoida: mahsulotga ekin×muammo qo‘shilsa, `crop_problems` ga ham avtomatik qo‘shiladi; mahsulot bog‘langan juftlikni ekin sahifasidan olib tashlab bo‘lmaydi.
+- Admin interfeysi faqat o‘zbekcha.
+
 Keyingi qadamlar:
-- Admin panel (mahsulot, narx, qoldiq, `product_usages`, buyurtmalar).
 - Excel/CSV import skripti (foydalanuvchi mahsulotlar ro‘yxatini beradi).
 - “Yetkazib berish”, “Biz haqimizda” sahifalari (hozir bosh sahifadagi bo‘limlarga havola).
 - Buyurtmada qoldiqni (`stock`) kamaytirish — hozir faqat `stock > 0` tekshiriladi.

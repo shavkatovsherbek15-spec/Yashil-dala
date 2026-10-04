@@ -1,0 +1,57 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import status_badge %}
+{% block title %}Buyurtmalar{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1>Buyurtmalar</h1>
+    <p class="sub">{{ total }} ta topildi</p>
+  </div>
+</div>
+
+<nav class="chips-nav" aria-label="Holat">
+  <a href="{{ url_with(status=None, p=None) }}" aria-current="{{ 'false' if status else 'true' }}">Hammasi</a>
+  {% for st, label in status_labels.items() %}
+  <a href="{{ url_with(status=st.value, p=None) }}" aria-current="{{ 'true' if status == st.value else 'false' }}">{{ label }} <small>{{ counts.get(st, 0) }}</small></a>
+  {% endfor %}
+</nav>
+
+<form class="toolbar" method="get">
+  {% if status %}<input type="hidden" name="status" value="{{ status }}">{% endif %}
+  <input class="input" type="search" name="q" value="{{ q }}" placeholder="Raqam, telefon yoki ism" aria-label="Qidirish">
+  <button class="btn btn-ghost btn-sm" type="submit">Qidirish</button>
+</form>
+
+<div class="card tbl-wrap">
+  {% if orders %}
+  <table class="tbl">
+    <thead>
+      <tr><th>№</th><th>Sana</th><th>Mijoz</th><th>Viloyat</th><th>Olish</th><th class="num">Jami, so‘m</th><th>Holat</th></tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td class="nowrap"><a href="/admin/buyurtmalar/{{ o.id }}">#{{ o.number }}</a></td>
+        <td class="nowrap">{{ o.created_at.strftime('%d.%m.%Y %H:%M') if o.created_at else '' }}</td>
+        <td>{{ o.customer_name }}<br><a href="tel:{{ o.phone|replace(' ', '') }}" class="muted" style="font-weight: 500">{{ o.phone }}</a></td>
+        <td>{{ region_name(o.region, 'uz') }}</td>
+        <td class="nowrap">{{ 'Yetkazish' if o.delivery_method.value == 'delivery' else 'Olib ketadi' }}</td>
+        <td class="num">{{ (o.total)|num }}</td>
+        <td>{{ status_badge(o.status, status_labels) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="panel-empty" style="margin: 16px">Buyurtma topilmadi.</p>
+  {% endif %}
+</div>
+
+{% if pages > 1 %}
+<nav class="pager" aria-label="Sahifalar">
+  {% for n in range(1, pages + 1) %}
+  {% if n == page_no %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ url_with(p=n) }}">{{ n }}</a>{% endif %}
+  {% endfor %}
+</nav>
+{% endif %}
+{% endblock %}

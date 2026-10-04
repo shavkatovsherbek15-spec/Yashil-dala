@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import csrf_field %}
+{% block title %}{{ problem.name_uz if problem else 'Yangi muammo' }}{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <h1>{{ problem.name_uz if problem else 'Yangi muammo' }}</h1>
+  <a href="/admin/malumotnoma#muammolar" class="btn btn-ghost btn-sm">Ma’lumotnomaga qaytish</a>
+</div>
+
+<form method="post" action="/admin/muammolar/{{ problem.id if problem else 'yangi' }}">
+  {{ csrf_field(csrf) }}
+  <section class="card box">
+    <div class="form-grid cols-3">
+      <div class="field"><label for="f-uz">Nomi <span class="lang-tag">UZ</span></label><input id="f-uz" class="input" name="name_uz" value="{{ problem.name_uz if problem else '' }}" required></div>
+      <div class="field"><label for="f-ru">Nomi <span class="lang-tag">RU</span></label><input id="f-ru" class="input" name="name_ru" value="{{ problem.name_ru if problem else '' }}"></div>
+      <div class="field">
+        <label for="f-type">Turi</label>
+        <select id="f-type" class="input" name="type" required>
+          <option value="">—</option>
+          {% for t, label in problem_types.items() %}<option value="{{ t.value }}"{% if problem and problem.type == t %} selected{% endif %}>{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field"><label for="f-slug">Slug <small class="hint">URL uchun</small></label><input id="f-slug" class="input" name="slug" value="{{ problem.slug if problem else '' }}"></div>
+      <div class="field"><label for="f-sort">Tartib raqami</label><input id="f-sort" class="input" name="sort" value="{{ problem.sort if problem else 0 }}" inputmode="numeric"></div>
+    </div>
+  </section>
+  <div class="sticky-save">
+    <button type="submit" class="btn btn-primary">Saqlash</button>
+    {% if problem %}<button type="submit" name="action" value="delete" class="btn btn-danger" formnovalidate onclick="return confirm('Muammo o‘chirilsinmi?')">O‘chirish</button>{% endif %}
+  </div>
+</form>
+{% endblock %}

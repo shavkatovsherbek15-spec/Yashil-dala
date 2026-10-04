@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+{% from "partials/icons.html" import pack %}
+{% block title %}Mahsulotlar{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1>Mahsulotlar</h1>
+    <p class="sub">{{ products|length }} ta</p>
+  </div>
+  <a href="/admin/mahsulotlar/yangi" class="btn btn-primary btn-sm">Mahsulot qo‘shish</a>
+</div>
+
+<form class="toolbar" method="get">
+  <input class="input" type="search" name="q" value="{{ q }}" placeholder="Nomi yoki guvohnoma raqami" aria-label="Qidirish">
+  <select class="input" name="cat" aria-label="Kategoriya" onchange="this.form.submit()">
+    <option value="">Barcha kategoriyalar</option>
+    {% for c in categories %}<option value="{{ c.id }}"{% if cat == c.id|string %} selected{% endif %}>{{ c.name_uz }}</option>{% endfor %}
+  </select>
+  <button class="btn btn-ghost btn-sm" type="submit">Qidirish</button>
+</form>
+
+<div class="card tbl-wrap">
+  {% if products %}
+  <table class="tbl">
+    <thead>
+      <tr><th></th><th>Nomi</th><th>Kategoriya</th><th>Qadoqlar (narx · qoldiq)</th><th>Holat</th></tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      {% set bg, fg, _ = cat_style(p.category.slug) %}
+      <tr class="{{ '' if p.is_active else 'inactive' }}">
+        <td style="width: 56px">
+          {% if p.images %}<img class="mini-thumb" src="{{ p.images[0].url }}" alt="">
+          {% else %}<span class="mini-pack" style="background: {{ bg }}; color: {{ fg }}">{{ pack(p.pack_shape, 0.3, 3) }}</span>{% endif %}
+        </td>
+        <td>
+          <a href="/admin/mahsulotlar/{{ p.id }}">{{ p.name_uz }}</a>
+          {% if p.registration_no %}<br><span class="muted" style="font-size: 13px">№ {{ p.registration_no }}</span>{% endif %}
+        </td>
+        <td>{{ p.category.short_uz }}</td>
+        <td>
+          {% for v in p.variants %}
+          <span class="nowrap">{{ v.pack_label }} — {{ v.price|num }} · <span class="{{ 'badge badge-warn' if v.stock <= 0 else '' }}">{{ v.stock }}</span></span>{% if not loop.last %}<br>{% endif %}
+          {% endfor %}
+        </td>
+        <td class="nowrap">
+          {% if not p.is_active %}<span class="badge badge-off">Yashirin</span>
+          {% elif p.is_popular %}<span class="badge st-delivered">Ommabop</span>
+          {% else %}<span class="badge st-accepted">Faol</span>{% endif %}
+          {% if p.is_active %} <a href="/mahsulot/{{ p.slug }}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 500">saytda</a>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="panel-empty" style="margin: 16px">Mahsulot topilmadi.</p>
+  {% endif %}
+</div>
+{% endblock %}

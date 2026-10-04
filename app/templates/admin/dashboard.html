@@ -1,0 +1,72 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import status_badge %}
+{% block title %}Bosh sahifa{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1>Bosh sahifa</h1>
+    <p class="sub">Salom, {{ admin.username }}.</p>
+  </div>
+  <div class="admin-actions">
+    <a href="/admin/mahsulotlar/yangi" class="btn btn-primary btn-sm">Mahsulot qo‘shish</a>
+  </div>
+</div>
+
+<div class="stats">
+  <a href="/admin/buyurtmalar?status=new" class="card stat{% if stats.new %} warn{% endif %}"><strong>{{ stats.new }}</strong><span>Yangi buyurtma</span></a>
+  <a href="/admin/buyurtmalar" class="card stat"><strong>{{ stats.today }}</strong><span>Oxirgi 24 soatda</span></a>
+  <a href="/admin/mahsulotlar" class="card stat"><strong>{{ stats.products }}</strong><span>Faol mahsulot</span></a>
+  <a href="/admin/narxlar" class="card stat{% if stats.no_price %} warn{% endif %}"><strong>{{ stats.no_price }}</strong><span>Narxsiz qadoq</span></a>
+</div>
+
+<div class="grid-2">
+  <section class="card box">
+    <div class="box-head">
+      <h2>Yangi buyurtmalar</h2>
+      <a href="/admin/buyurtmalar" class="link-more">Barchasi</a>
+    </div>
+    {% if new_orders %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tbody>
+          {% for o in new_orders %}
+          <tr>
+            <td class="nowrap"><a href="/admin/buyurtmalar/{{ o.id }}">#{{ o.number }}</a></td>
+            <td>{{ o.customer_name }}<br><span class="muted">{{ o.phone }}</span></td>
+            <td class="num">{{ (o.total)|num }}</td>
+            <td>{{ status_badge(o.status, status_labels) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="panel-empty">Yangi buyurtma yo‘q.</p>
+    {% endif %}
+  </section>
+
+  <section class="card box">
+    <div class="box-head">
+      <h2>Qoldig‘i kam (≤ {{ low_limit }})</h2>
+      <a href="/admin/narxlar" class="link-more">Narx va qoldiq</a>
+    </div>
+    {% if low_stock %}
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <tbody>
+          {% for v in low_stock %}
+          <tr>
+            <td><a href="/admin/mahsulotlar/{{ v.product.id }}">{{ v.product.name_uz }}</a></td>
+            <td class="nowrap">{{ v.pack_label }}</td>
+            <td class="num"><span class="badge {{ 'badge-warn' if v.stock == 0 else 'st-new' }}">{{ v.stock }} dona</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="panel-empty">Hamma qadoqlar yetarli.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

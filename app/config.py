@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     shop_telegram: str = "https://t.me/"
     delivery_price: int = 0
 
+    # Ishlab chiqarishda (HTTPS) True qiling — sessiya cookie faqat HTTPS orqali yuboriladi
+    session_https_only: bool = False
+    # Admin yuklagan rasmlar papkasi (/media/... manzilida beriladi)
+    media_dir: str = "media"
+    max_upload_mb: int = 5
+
     # Telegram bot: token bo'lmasa xabar yuborilmaydi (faqat log)
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""

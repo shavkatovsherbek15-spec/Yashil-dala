@@ -1,0 +1,44 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import csrf_field %}
+{% block title %}Narx va qoldiq{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1>Narx va qoldiq</h1>
+    <p class="sub">Barcha qadoqlar bitta jadvalda. O‘zgartiring va “Saqlash”ni bosing.</p>
+  </div>
+</div>
+
+<nav class="chips-nav" aria-label="Kategoriya">
+  <a href="/admin/narxlar" aria-current="{{ 'false' if cat else 'true' }}">Hammasi</a>
+  {% for c in categories %}
+  <a href="/admin/narxlar?cat={{ c.id }}" aria-current="{{ 'true' if cat == c.id|string else 'false' }}">{{ c.short_uz }}</a>
+  {% endfor %}
+</nav>
+
+<form method="post" action="/admin/narxlar">
+  {{ csrf_field(csrf) }}
+  <input type="hidden" name="next" value="{{ current_path }}{{ '?cat=' ~ cat if cat else '' }}">
+  <div class="card tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Mahsulot</th><th>Qadoq</th><th class="num">Narx, so‘m</th><th class="num">Qoldiq</th></tr></thead>
+      <tbody>
+        {% for v in variants %}
+        {% set prev = variants[loop.index0 - 1] if not loop.first else none %}
+        <tr class="{{ 'inactive' if not v.product.is_active else '' }} {{ 'low' if v.stock <= low_limit else '' }}">
+          <td>{% if not prev or prev.product_id != v.product_id %}<a href="/admin/mahsulotlar/{{ v.product.id }}">{{ v.product.name_uz }}</a>{% if not v.product.is_active %} <span class="badge badge-off">Yashirin</span>{% endif %}{% endif %}</td>
+          <td class="nowrap">{{ v.pack_label }}</td>
+          <td class="num"><input class="input input-num" name="p-{{ v.id }}" value="{{ v.price if v.price is not none else '' }}" inputmode="numeric" placeholder="[narx]" aria-label="{{ v.product.name_uz }}, {{ v.pack_label }} — narx"></td>
+          <td class="num stock"><input class="input input-sm" name="s-{{ v.id }}" value="{{ v.stock }}" inputmode="numeric" aria-label="{{ v.product.name_uz }}, {{ v.pack_label }} — qoldiq"></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Qadoq yo‘q.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="sticky-save">
+    <button type="submit" class="btn btn-primary">Saqlash</button>
+  </div>
+</form>
+{% endblock %}

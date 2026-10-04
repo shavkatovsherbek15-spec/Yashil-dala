@@ -8,6 +8,7 @@ import pytest
 _tmp = Path(tempfile.mkdtemp()) / "test.db"
 os.environ["DATABASE_URL"] = f"sqlite:///{_tmp}"
 os.environ["SECRET_KEY"] = "test"
+os.environ["MEDIA_DIR"] = str(_tmp.parent / "media")
 os.environ["TELEGRAM_BOT_TOKEN"] = ""
 os.environ["TELEGRAM_CHAT_ID"] = "777"
 os.environ["TELEGRAM_WEBHOOK_SECRET"] = "hook-secret"

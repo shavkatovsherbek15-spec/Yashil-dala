@@ -209,9 +209,11 @@ def seed(db: Session) -> None:
     db.add_all([*cats.values(), *crops.values(), *problems.values()])
     db.flush()
 
-    for crop_slug, problem_slugs in CROP_PROBLEMS.items():
-        for ps in problem_slugs:
-            db.add(CropProblem(crop_id=crops[crop_slug].id, problem_id=problems[ps].id))
+    # Ekin ro'yxatidagi muammolar + mahsulot bog'langan har bir juftlik (aks holda tanlashda ko'rinmaydi)
+    pairs = {(c, ps) for c, slugs in CROP_PROBLEMS.items() for ps in slugs}
+    pairs |= {(c, ps) for item in PRODUCTS for c, slugs in item["usages"].items() for ps in slugs}
+    for crop_slug, ps in sorted(pairs):
+        db.add(CropProblem(crop_id=crops[crop_slug].id, problem_id=problems[ps].id))
 
     for i, item in enumerate(PRODUCTS):
         usage_uz, usage_ru, safety_uz, safety_ru = TEXTS[item["texts"]]

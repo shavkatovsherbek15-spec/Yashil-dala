@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import csrf_field %}
+{% block title %}{{ crop.name_uz if crop else 'Yangi ekin' }}{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <h1>{{ crop.name_uz if crop else 'Yangi ekin' }}</h1>
+  <a href="/admin/malumotnoma#ekinlar" class="btn btn-ghost btn-sm">Ma’lumotnomaga qaytish</a>
+</div>
+
+<form method="post" action="/admin/ekinlar/{{ crop.id if crop else 'yangi' }}">
+  {{ csrf_field(csrf) }}
+  <section class="card box">
+    <div class="form-grid cols-3">
+      <div class="field"><label for="f-uz">Nomi <span class="lang-tag">UZ</span></label><input id="f-uz" class="input" name="name_uz" value="{{ crop.name_uz if crop else '' }}" required></div>
+      <div class="field"><label for="f-ru">Nomi <span class="lang-tag">RU</span></label><input id="f-ru" class="input" name="name_ru" value="{{ crop.name_ru if crop else '' }}"></div>
+      <div class="field"><label for="f-slug">Slug <small class="hint">URL uchun</small></label><input id="f-slug" class="input" name="slug" value="{{ crop.slug if crop else '' }}"></div>
+      <div class="field"><label for="f-color">Rang</label><input id="f-color" class="color-input" type="color" name="color" value="{{ crop.color if crop else '#9BD27E' }}"></div>
+      <div class="field"><label for="f-sort">Tartib raqami</label><input id="f-sort" class="input" name="sort" value="{{ crop.sort if crop else 0 }}" inputmode="numeric"></div>
+    </div>
+  </section>
+
+  <section class="card box" style="margin-top: 16px">
+    <h2>Bu ekinda ko‘rsatiladigan muammolar</h2>
+    <p class="note">Mahsulot bog‘langan muammoni olib tashlab bo‘lmaydi.</p>
+    {% for t, label in problem_types.items() %}
+    {% set group = problems|selectattr('type', 'equalto', t)|list %}
+    {% if group %}
+    <h3 style="font-size: 14px; font-weight: 700; color: var(--muted); margin-top: 6px">{{ label }}</h3>
+    <div class="check-grid">
+      {% for p in group %}
+      <label class="check-card"><input type="checkbox" name="problems" value="{{ p.id }}"{% if p.id in linked %} checked{% endif %}> {{ p.name_uz }}</label>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+  </section>
+
+  <div class="sticky-save">
+    <button type="submit" class="btn btn-primary">Saqlash</button>
+    {% if crop %}<button type="submit" name="action" value="delete" class="btn btn-danger" formnovalidate onclick="return confirm('Ekin o‘chirilsinmi?')">O‘chirish</button>{% endif %}
+  </div>
+</form>
+{% endblock %}

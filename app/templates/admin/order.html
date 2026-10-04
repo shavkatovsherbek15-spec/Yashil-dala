@@ -1,0 +1,60 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import status_badge, csrf_field %}
+{% block title %}Buyurtma #{{ order.number }}{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <h1>Buyurtma #{{ order.number }} {{ status_badge(order.status, status_labels) }}</h1>
+    <p class="sub">{{ order.created_at.strftime('%d.%m.%Y %H:%M') if order.created_at else '' }} · til: {{ order.lang|upper }}</p>
+  </div>
+  <a href="/admin/buyurtmalar" class="btn btn-ghost btn-sm">Ro‘yxatga qaytish</a>
+</div>
+
+<div class="grid-2">
+  <section class="card box">
+    <h2>Mijoz</h2>
+    <dl class="kv">
+      <dt>Ism</dt><dd>{{ order.customer_name }}</dd>
+      <dt>Telefon</dt><dd><a href="tel:{{ order.phone|replace(' ', '') }}">{{ order.phone }}</a></dd>
+      <dt>Viloyat</dt><dd>{{ region_name(order.region, 'uz') }}</dd>
+      <dt>Olish</dt><dd>{{ 'Yetkazib berish' if order.delivery_method.value == 'delivery' else 'O‘zi olib ketadi' }}</dd>
+      {% if order.address %}<dt>Manzil</dt><dd>{{ order.address }}</dd>{% endif %}
+      <dt>Izoh</dt><dd>{{ order.comment or '—' }}</dd>
+      <dt>Rozilik</dt><dd>{{ order.consent_at.strftime('%d.%m.%Y %H:%M') if order.consent_at else '—' }}</dd>
+    </dl>
+  </section>
+
+  <section class="card box">
+    <h2>Holatni o‘zgartirish</h2>
+    <form class="status-form" action="/admin/buyurtmalar/{{ order.id }}/holat" method="post">
+      {{ csrf_field(csrf) }}
+      {% for st, label in status_labels.items() %}
+      <button type="submit" name="status" value="{{ st.value }}" class="btn btn-ghost btn-sm" aria-pressed="{{ 'true' if order.status == st else 'false' }}">{{ label }}</button>
+      {% endfor %}
+    </form>
+    <p class="note">{% if order.telegram_message_id %}Telegramdagi xabar ham yangilanadi.{% else %}Bu buyurtma Telegramga yuborilmagan (bot sozlanmagan bo‘lishi mumkin).{% endif %}</p>
+  </section>
+</div>
+
+<section class="card box" style="margin-top: 20px">
+  <h2>Mahsulotlar</h2>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>Mahsulot</th><th>Qadoq</th><th class="num">Soni</th><th class="num">Narx</th><th class="num">Summa</th></tr></thead>
+      <tbody>
+        {% for item in order.items %}
+        <tr>
+          <td><a href="/admin/mahsulotlar/{{ item.variant.product.id }}">{{ item.variant.product.name_uz }}</a></td>
+          <td>{{ item.variant.pack_label }}</td>
+          <td class="num">{{ item.qty }}</td>
+          <td class="num">{{ (item.unit_price)|num }}</td>
+          <td class="num">{{ (item.unit_price * item.qty)|num }}</td>
+        </tr>
+        {% endfor %}
+        <tr><td colspan="4">Yetkazib berish</td><td class="num">{{ (order.delivery_price)|num if order.delivery_price else '—' }}</td></tr>
+        <tr><td colspan="4"><strong>Jami</strong></td><td class="num"><strong>{{ (order.total)|num }} so‘m</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

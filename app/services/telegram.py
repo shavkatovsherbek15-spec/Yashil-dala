@@ -149,3 +149,24 @@ def handle_update(update: dict) -> None:
             "answerCallbackQuery",
             {"callback_query_id": query["id"], "text": STATUS_LABELS[new_status]},
         )
+
+
+def refresh_order_message(order_id: int) -> None:
+    """Admin paneldan holat o'zgarganda bot xabarini ham yangilash."""
+    chat_id = get_settings().telegram_chat_id
+    if not chat_id:
+        return
+    with SessionLocal() as db:
+        order = get_order(db, order_id)
+        if order is None or not order.telegram_message_id:
+            return
+        _api(
+            "editMessageText",
+            {
+                "chat_id": chat_id,
+                "message_id": order.telegram_message_id,
+                "text": order_text(order),
+                "parse_mode": "HTML",
+                "reply_markup": order_keyboard(order),
+            },
+        )
