@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% from "partials/icons.html" import icon, product_media %}
+{% block title %}{{ product.t('name', lang) }} — {{ settings.shop_name }}{% endblock %}
+{% block description %}{{ product.t('description', lang)|truncate(160) }}{% endblock %}
+{% block content %}
+{% set bg, fg, _ = cat_style(product.category.slug) %}
+<div class="container">
+  <nav class="breadcrumb" aria-label="{{ t('breadcrumb') }}">
+    <a href="/katalog">{{ t('nav_catalog') }}</a>
+    <span aria-hidden="true">/</span>
+    <a href="/katalog?cat={{ product.category.slug }}">{{ product.category.t('name', lang) }}</a>
+  </nav>
+
+  <div class="product-layout">
+    <div class="gallery" style="background: {{ bg }}; color: {{ fg }}" aria-label="{{ t('gallery') }}">
+      {% if product.images %}
+      <img src="{{ product.images[0].url }}" alt="{{ product.t('name', lang) }}">
+      {% else %}
+      {{ product_media(product, 1.7, 1.6) }}
+      <div class="gallery-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      {% endif %}
+    </div>
+
+    <section class="product-info">
+      <span class="pill" style="background: {{ bg }}; color: {{ fg }}">
+        {{ product.category.t('name', lang) }}{% if product.t('kind', lang) %} · {{ product.t('kind', lang) }}{% endif %}
+      </span>
+      <h1>{{ product.t('name', lang) }}</h1>
+      {% if product.t('description', lang) %}<p class="product-desc">{{ product.t('description', lang) }}</p>{% endif %}
+
+      <dl class="card specs">
+        <div><dt>{{ t('active_ingredient') }}</dt><dd>{{ product.active_ingredient or '[modda, g/l]' }}</dd></div>
+        <div><dt>{{ t('registration_no') }}</dt><dd>№ {{ product.registration_no or '[raqam]' }}</dd></div>
+        <div><dt>{{ t('manufacturer') }}</dt><dd>{{ product.manufacturer or '[nomi]' }}</dd></div>
+        {% if product.category.slug != 'ogit' or product.waiting_days %}
+        <div><dt>{{ t('waiting_days') }}</dt><dd>{{ product.waiting_days if product.waiting_days is not none else '[kun]' }} {{ t('days') }}</dd></div>
+        {% endif %}
+      </dl>
+
+      {% if variant %}
+      <form class="buy" action="/savatcha/qoshish" method="post" data-buy>
+        <fieldset class="field" style="border: 0; margin: 0; padding: 0">
+          <legend class="field-label" style="margin-bottom: 8px">{{ t('pack') }}</legend>
+          <div class="packs" role="radiogroup" aria-label="{{ t('pack_group') }}">
+            {% for v in product.variants %}
+            <label class="pack">
+              <input type="radio" name="variant_id" value="{{ v.id }}"
+                     data-price="{{ money(v.price) }}" data-pack="{{ t('for_pack', pack=v.pack_label) }}"
+                     {% if v.id == variant.id %}checked{% endif %} {% if v.stock <= 0 %}disabled{% endif %}>
+              <span>{{ v.pack_label }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+
+        <div class="price-row">
+          <span class="price-big" data-price-out>{{ money(variant.price) }}</span>
+          <span class="price-note" data-pack-out>{{ t('for_pack', pack=variant.pack_label) }}</span>
+        </div>
+
+        <div class="buy-row">
+          <div class="qty" data-qty>
+            <button type="button" aria-label="{{ t('decrease') }}" data-step="-1">{{ icon('minus', 18, 2.2) }}</button>
+            <input type="number" name="qty" value="1" min="1" max="99" inputmode="numeric" aria-label="{{ t('quantity') }}">
+            <button type="button" aria-label="{{ t('increase') }}" data-step="1">{{ icon('plus', 18, 2.2) }}</button>
+          </div>
+          {% set any_stock = product.variants|selectattr('stock', 'gt', 0)|list %}
+          <button type="submit" class="btn btn-primary" {% if not any_stock %}disabled{% endif %}>
+            {{ icon('cart', 20) }}{{ t('add_to_cart') if any_stock else t('out_of_stock') }}
+          </button>
+        </div>
+      </form>
+      {% endif %}
+    </section>
+  </div>
+
+  <div class="product-extra">
+    <div>
+      {% if usage_rows %}
+      <section class="section">
+        <h2 class="section-title-sm">{{ t('allowed_h2') }}</h2>
+        <div class="card table-wrap">
+          <table class="table">
+            <thead><tr><th scope="col">{{ t('col_crop') }}</th><th scope="col">{{ t('col_problem') }}</th><th scope="col">{{ t('col_dose') }}</th></tr></thead>
+            <tbody>
+              {% for row in usage_rows %}
+              <tr>
+                <td>{{ row.crop }}</td>
+                <td>{{ row.problems|join(', ') }}</td>
+                <td>{{ row.doses|join('; ') if row.doses else t('dose_placeholder') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="note">{{ t('allowed_note') }}</p>
+      </section>
+      {% endif %}
+
+      {% set steps = product.lines('usage', lang) %}
+      {% if steps %}
+      <section class="section">
+        <h2 class="section-title-sm">{{ t('how_h2') }}</h2>
+        <ol class="howto">
+          {% for s in steps %}
+          <li><span class="howto-num">{{ loop.index }}</span><span>{{ s|replace('{days}', product.waiting_days if product.waiting_days is not none else '[kun]') }}</span></li>
+          {% endfor %}
+        </ol>
+      </section>
+      {% endif %}
+    </div>
+
+    {% set safety = product.lines('safety', lang) %}
+    {% if safety %}
+    <section class="safety">
+      <div class="safety-head">{{ icon('warning', 22, 2) }}<h2>{{ t('safety_h2') }}</h2></div>
+      <ul>{% for s in safety %}<li>{{ s }}</li>{% endfor %}</ul>
+    </section>
+    {% else %}
+    <div style="height: 40px"></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

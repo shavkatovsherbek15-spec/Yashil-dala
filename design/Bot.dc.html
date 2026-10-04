@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Telegram botga keladigan xabar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1E5B3A}a:hover{color:#143F28}
+button,input,select,textarea{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #DCE5D7; font-family: 'Onest', sans-serif; color: #16241B; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="display: flex; align-items: center; gap: 10px; height: 64px; padding: 0 8px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DCE2D8; flex-shrink: 0">
+<button type="button" aria-label="Orqaga" style="width: 44px; height: 44px; border: 0; background: transparent; color: #16241B; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 20px; background: #1E5B3A; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20c0-9 5-14.5 15-16-1 9.5-6.5 15-15 16z"></path><path d="M5 20l8-8"></path></svg></span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<span style="font-size: 16px; font-weight: 700">Yashil Dala · Buyurtmalar</span>
+<span style="font-size: 13px; color: #4D5C52">bot</span>
+</div>
+<button type="button" aria-label="Qo‘shimcha" style="width: 44px; height: 44px; border: 0; background: transparent; color: #16241B; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v.01M12 12v.01M12 19v.01"></path></svg></button>
+</header>
+
+<div style="flex: 1; padding: 16px 12px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px">
+
+<span style="align-self: center; padding: 4px 12px; border-radius: 999px; background: #C6D3C0; color: #24362A; font-size: 13px; font-weight: 600">Bugun</span>
+
+<div style="align-self: flex-start; max-width: 300px; padding: 10px 14px; border-radius: 16px 16px 16px 4px; background: #FFFFFF; font-size: 15px; line-height: 1.45; display: flex; flex-direction: column; gap: 2px">
+<span>Buyurtma <strong>#0000</strong> — holati: <strong style="color: #1E5B3A">Yetkazildi</strong></span>
+<span style="align-self: flex-end; font-size: 12px; color: #5E6B62">11:20</span>
+</div>
+
+<div style="align-self: flex-start; width: 320px; display: flex; flex-direction: column; gap: 6px">
+<div style="padding: 12px 14px; border-radius: 16px 16px 16px 4px; background: #FFFFFF; font-size: 15px; line-height: 1.5; display: flex; flex-direction: column">
+<strong style="font-size: 16px; margin-bottom: 6px">Yangi buyurtma #0001</strong>
+<span>Mijoz: Ism Familiya</span>
+<span>Telefon: +998 90 000 00 00</span>
+<span>Viloyat: Samarqand</span>
+<span>Manzil: [manzil]</span>
+<span>Olish: yetkazib berish</span>
+<span style="height: 1px; background: #EAEEE7; margin: 8px 0"></span>
+<strong>Mahsulotlar:</strong>
+<span>1. Shiraga qarshi insektitsid, 250 ml × 2</span>
+<span>2. NPK kompleks o‘g‘it 20-20-20, 1 kg × 1</span>
+<span style="height: 1px; background: #EAEEE7; margin: 8px 0"></span>
+<span><strong>Jami: [narx] so‘m</strong></span>
+<span>To‘lov: qabul qilganda</span>
+<span>Izoh: —</span>
+<span style="align-self: flex-end; font-size: 12px; color: #5E6B62; margin-top: 4px">15:47</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+<button type="button" style="height: 44px; border: 0; border-radius: 10px; background: #F7F9F5; color: #1E5B3A; font-size: 14px; font-weight: 700; cursor: pointer">Qabul qilish</button>
+<button type="button" style="height: 44px; border: 0; border-radius: 10px; background: #F7F9F5; color: #1E5B3A; font-size: 14px; font-weight: 700; cursor: pointer">Qo‘ng‘iroq qildim</button>
+<button type="button" style="grid-column: span 2; height: 44px; border: 0; border-radius: 10px; background: #F7F9F5; color: #9A2B1F; font-size: 14px; font-weight: 700; cursor: pointer">Bekor qilish</button>
+</div>
+</div>
+
+</div>
+
+<div style="display: flex; align-items: center; gap: 8px; height: 64px; padding: 0 12px; box-sizing: border-box; background: #FFFFFF; border-top: 1px solid #DCE2D8; flex-shrink: 0">
+<button type="button" style="height: 40px; padding: 0 14px; border: 0; border-radius: 10px; background: #1E5B3A; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer">Menyu</button>
+<label style="flex: 1; display: flex">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Xabar</span>
+<input type="text" placeholder="Xabar" style="width: 100%; height: 40px; padding: 0 12px; box-sizing: border-box; border: 0; border-radius: 10px; background: #F4F5EF; font-size: 15px; color: #16241B">
+</label>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

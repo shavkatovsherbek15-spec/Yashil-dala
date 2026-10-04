@@ -1,0 +1,83 @@
+{% from "partials/icons.html" import icon %}
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ settings.shop_name }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ t('footer_tagline') }}{% endblock %}">
+<meta name="theme-color" content="#1E5B3A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+{% set nav = [
+  ('/katalog', t('nav_catalog')),
+  ('/tanlash', t('nav_select')),
+  ('/#yetkazish', t('nav_delivery')),
+  ('/#aloqa', t('nav_contact')),
+] %}
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">
+      <span class="logo-mark">{{ icon('leaf', 20, 2) }}</span>
+      <span class="logo-text">{{ settings.shop_name }}</span>
+    </a>
+    <nav class="header-nav" aria-label="{{ t('menu') }}">
+      {% for href, label in nav %}
+      <a href="{{ href }}"{% if current_path == href %} aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="header-actions">
+      <a class="header-phone" href="tel:{{ settings.shop_phone|replace(' ', '') }}">{{ settings.shop_phone }}</a>
+      <span class="lang-btn" role="group" aria-label="{{ t('lang_switch_label') }}">
+        {% set here = request.url.path ~ ('?' ~ request.url.query if request.url.query else '') %}
+        <a href="/til/uz?next={{ here|urlencode }}" lang="uz" {% if lang != 'uz' %}class="off"{% else %}aria-current="true"{% endif %}>UZ</a>
+        <span class="off" aria-hidden="true">/</span>
+        <a href="/til/ru?next={{ here|urlencode }}" lang="ru" {% if lang != 'ru' %}class="off"{% else %}aria-current="true"{% endif %}>RU</a>
+      </span>
+      <a href="/savatcha" class="icon-btn header-cart" aria-label="{{ t('cart_label', n=cart_count) }}">
+        {{ icon('cart') }}
+        {% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
+      </a>
+      <details class="menu">
+        <summary class="icon-btn" aria-label="{{ t('menu') }}">{{ icon('menu') }}</summary>
+        <nav class="menu-panel" aria-label="{{ t('menu') }}">
+          {% for href, label in nav %}<a href="{{ href }}">{{ label }}</a>{% endfor %}
+          <a href="tel:{{ settings.shop_phone|replace(' ', '') }}">{{ settings.shop_phone }}</a>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer" id="aloqa">
+  <div class="container">
+    <div>
+      <div class="footer-brand">{{ settings.shop_name }}</div>
+      <p class="footer-tag">{{ t('footer_tagline') }}</p>
+    </div>
+    <nav class="footer-nav" aria-label="{{ t('footer_nav') }}">
+      <a href="/katalog">{{ t('nav_catalog') }}</a>
+      <a href="/tanlash">{{ t('nav_select') }}</a>
+      <a href="/#yetkazish">{{ t('nav_delivery') }}</a>
+      <a href="/#biz">{{ t('nav_about') }}</a>
+    </nav>
+    <div class="footer-contacts">
+      <span>{{ t('phone') }}: <a href="tel:{{ settings.shop_phone|replace(' ', '') }}">{{ settings.shop_phone }}</a></span>
+      <span>{{ t('address') }}: {{ settings.shop_address }}</span>
+      <span>{{ t('license') }}: № {{ settings.shop_license }}</span>
+    </div>
+    <span class="footer-copy">© {{ now_year }} {{ settings.shop_name }}</span>
+  </div>
+</footer>
+<script src="{{ url_for('static', path='js/app.js') }}" defer></script>
+</body>
+</html>

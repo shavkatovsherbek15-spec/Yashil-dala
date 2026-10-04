@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% from "partials/icons.html" import icon, product_media %}
+{% block title %}{{ t('select_title') }} — {{ settings.shop_name }}{% endblock %}
+{% block content %}
+{% set steps = [
+  (t('step_crop'), 'is-done' if crop else 'is-active'),
+  (t('step_problem'), 'is-done' if problem else ('is-active' if crop else '')),
+  (t('step_result'), 'is-active' if problem else ''),
+] %}
+<div class="container narrow" style="margin-left: auto; margin-right: auto">
+  <section class="page-head">
+    <h1>{{ t('select_title') }}</h1>
+    <p>{{ t('select_lead') }}</p>
+    <ol class="steps" style="list-style: none; padding: 0; margin: 4px 0 0">
+      {% for label, state in steps %}
+      <li class="step {{ state }}"{% if state == 'is-active' %} aria-current="step"{% endif %}>
+        <span class="step-num">{{ loop.index }}</span>{{ label }}
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section class="panel" aria-labelledby="q1">
+    <div class="panel-head">
+      <h2 id="q1">{{ t('select_q1') }}</h2>
+      {% if crop %}<a href="/tanlash" class="text-btn">{{ t('reset') }}</a>{% endif %}
+    </div>
+    <div class="choice-grid">
+      {% for c in crops %}
+      {% set on = crop and c.id == crop.id %}
+      <a href="/tanlash?crop={{ c.slug }}#q2" class="choice" aria-current="{{ 'true' if on else 'false' }}">
+        <span class="dot" style="background: {{ c.color }}"></span>
+        <span class="label">{{ c.t('name', lang) }}</span>
+        {% if on %}{{ icon('check', 18, 2.4) }}{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="q2">
+    <div class="stack" style="gap: 2px">
+      <h2 id="q2">{{ t('select_q2') }}</h2>
+      {% if crop %}<span class="panel-sub">{{ t('for_crop', crop=crop.t('name', lang)) }}</span>{% endif %}
+    </div>
+    {% if not crop %}
+    <p class="panel-empty">{{ t('select_crop_first') }}</p>
+    {% else %}
+    <div class="choice-grid">
+      {% for p in crop.problems %}
+      {% set on = problem and p.id == problem.id %}
+      <a href="/tanlash?crop={{ crop.slug }}&problem={{ p.slug }}#q3" class="choice choice-problem" aria-current="{{ 'true' if on else 'false' }}">
+        <span class="label">{{ p.t('name', lang) }}</span>
+        <span class="sub">{{ t('ptype_' ~ p.type.value) }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="panel" aria-labelledby="q3" aria-live="polite">
+    <div class="stack" style="gap: 2px">
+      <h2 id="q3">{{ t('select_q3') }}</h2>
+      {% if problem %}
+      <span class="panel-sub">{{ t('found_n', crop=crop.t('name', lang), problem=problem.t('name', lang), n=results|length) }}</span>
+      {% endif %}
+    </div>
+
+    {% if not problem %}
+    <p class="panel-empty">{{ t('select_waiting') }}</p>
+    {% elif results %}
+    <div class="result-list">
+      {% for p, usage in results %}
+      {% set bg, fg, _ = cat_style(p.category.slug) %}
+      <div class="result">
+        <div class="result-media" style="background: {{ bg }}; color: {{ fg }}">{{ product_media(p, 0.72, 2.4) }}</div>
+        <div class="result-body">
+          <span class="pill" style="background: {{ bg }}; color: {{ fg }}">{{ p.category.t('name', lang) }}</span>
+          <span class="result-name">{{ p.t('name', lang) }}</span>
+          <span class="result-meta">{{ p.variants|map(attribute='pack_label')|join(' · ') }} · {{ t('dose') }}: {{ usage.dose_text or t('dose_placeholder') }}</span>
+          <div class="result-foot">
+            <span class="result-price">{{ money(p.min_price) }}</span>
+            <a href="/mahsulot/{{ p.slug }}" class="btn btn-primary btn-sm">{{ t('view') }}</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-results">
+      <p>{{ t('no_results') }}</p>
+      <a href="{{ settings.shop_telegram }}" class="btn btn-primary btn-sm" rel="noopener">{{ t('write_expert') }}</a>
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="tip">
+    <p>{{ t('not_listed') }}</p>
+    <a href="{{ settings.shop_telegram }}" class="icon-btn" aria-label="{{ t('write_telegram') }}" rel="noopener">{{ icon('send') }}</a>
+  </section>
+</div>
+{% endblock %}

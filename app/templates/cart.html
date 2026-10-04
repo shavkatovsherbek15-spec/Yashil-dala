@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% from "partials/icons.html" import icon, product_media %}
+{% block title %}{{ t('cart_title') }} — {{ settings.shop_name }}{% endblock %}
+{% block content %}
+{% macro err(name) %}{% if form.errors.get(name) %}<span class="field-error" id="err-{{ name }}">{{ t(form.errors[name]) }}</span>{% endif %}{% endmacro %}
+{% macro described(name) %}{% if form.errors.get(name) %} aria-invalid="true" aria-describedby="err-{{ name }}"{% endif %}{% endmacro %}
+<div class="container">
+  <section class="page-head" style="padding-bottom: 12px">
+    <div class="page-title-row">
+      <h1>{{ t('cart_title') }}</h1>
+      {% if cart.lines %}<span>{{ t('n_kinds', n=cart.lines|length) }}</span>{% endif %}
+    </div>
+  </section>
+
+  {% if not cart.lines %}
+  <div class="empty-state">
+    {% if form.errors.get('cart') %}<p class="alert" role="alert">{{ t('err_cart') }}</p>{% endif %}
+    <p class="muted">{{ t('cart_empty') }}</p>
+    <a href="/katalog" class="btn btn-primary">{{ t('go_catalog') }}</a>
+  </div>
+  {% else %}
+  <div class="cart-layout">
+    <div class="stack" style="gap: 12px">
+      <div class="cart-lines">
+        {% for line in cart.lines %}
+        {% set p = line.product %}
+        {% set bg, fg, _ = cat_style(p.category.slug) %}
+        <div class="card cart-line">
+          <div class="cart-media" style="background: {{ bg }}; color: {{ fg }}">{{ product_media(p, 0.6, 2.6) }}</div>
+          <div class="cart-body">
+            <div class="cart-top">
+              <a href="/mahsulot/{{ p.slug }}" class="cart-name">{{ p.t('name', lang) }}</a>
+              <form action="/savatcha/yangilash" method="post">
+                <input type="hidden" name="variant_id" value="{{ line.variant.id }}">
+                <input type="hidden" name="qty" value="0">
+                <button type="submit" class="icon-btn cart-remove" aria-label="{{ t('remove') }}">{{ icon('trash', 20) }}</button>
+              </form>
+            </div>
+            <span class="result-meta">{{ t('pack') }}: {{ line.variant.pack_label }}</span>
+            <div class="cart-foot">
+              <span class="result-price">{{ money(line.subtotal) }}</span>
+              <div class="qty qty-sm">
+                <form action="/savatcha/yangilash" method="post">
+                  <input type="hidden" name="variant_id" value="{{ line.variant.id }}">
+                  <input type="hidden" name="qty" value="{{ line.qty - 1 }}">
+                  <button type="submit" aria-label="{{ t('decrease') }}">{{ icon('minus', 16, 2.2) }}</button>
+                </form>
+                <span aria-label="{{ t('quantity') }}">{{ line.qty }}</span>
+                <form action="/savatcha/yangilash" method="post">
+                  <input type="hidden" name="variant_id" value="{{ line.variant.id }}">
+                  <input type="hidden" name="qty" value="{{ line.qty + 1 }}">
+                  <button type="submit" aria-label="{{ t('increase') }}">{{ icon('plus', 16, 2.2) }}</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="card summary">
+        <div class="summary-row"><span>{{ t('items_n', n=cart.count) }}</span><span>{{ money(items_total) }}</span></div>
+        <div class="summary-row"><span>{{ t('delivery_cost') }}</span><span>{{ t('free') if form.delivery_method == 'pickup' else money(delivery_price or None) }}</span></div>
+        <div class="hr"></div>
+        <div class="summary-total"><span>{{ t('total') }}</span><span>{{ money(grand_total) }}</span></div>
+      </div>
+    </div>
+
+    <form class="order-form" action="/buyurtma" method="post" novalidate>
+      <h2 class="section-title">{{ t('order_h2') }}</h2>
+      {% if form.errors %}<p class="alert" role="alert">{{ t('form_errors') }}</p>{% endif %}
+
+      <div class="field{% if form.errors.get('customer_name') %} has-error{% endif %}">
+        <label for="f-name">{{ t('f_name') }}</label>
+        <input id="f-name" class="input" type="text" name="customer_name" value="{{ form.customer_name }}" placeholder="{{ t('f_name_ph') }}" autocomplete="name" required maxlength="200"{{ described('customer_name') }}>
+        {{ err('customer_name') }}
+      </div>
+
+      <div class="field{% if form.errors.get('phone') %} has-error{% endif %}">
+        <label for="f-phone">{{ t('f_phone') }}</label>
+        <div class="phone-input">
+          <span>+998</span>
+          <input id="f-phone" type="tel" name="phone" value="{{ form.phone }}" placeholder="90 000 00 00" autocomplete="tel-national" inputmode="tel" required maxlength="20" data-phone{{ described('phone') }}>
+        </div>
+        {{ err('phone') }}
+      </div>
+
+      <div class="field{% if form.errors.get('region') %} has-error{% endif %}">
+        <label for="f-region">{{ t('f_region') }}</label>
+        <select id="f-region" class="input" name="region" required{{ described('region') }}>
+          <option value="">—</option>
+          {% for slug, uz, ru in regions %}
+          <option value="{{ slug }}"{% if form.region == slug %} selected{% endif %}>{{ ru if lang == 'ru' else uz }}</option>
+          {% endfor %}
+        </select>
+        {{ err('region') }}
+      </div>
+
+      <div class="field{% if form.errors.get('address') %} has-error{% endif %}">
+        <label for="f-address">{{ t('f_address') }}</label>
+        <textarea id="f-address" class="input" name="address" rows="3" placeholder="{{ t('f_address_ph') }}" autocomplete="street-address" maxlength="500"{{ described('address') }}>{{ form.address }}</textarea>
+        {{ err('address') }}
+      </div>
+
+      <fieldset class="field">
+        <legend>{{ t('f_method') }}</legend>
+        <label class="radio-card">
+          <input type="radio" name="delivery_method" value="delivery"{% if form.delivery_method != 'pickup' %} checked{% endif %}>
+          <span><strong>{{ t('m_delivery') }}</strong><small>{{ t('m_delivery_sub') }} · {{ money(delivery_price or None) }}</small></span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="delivery_method" value="pickup"{% if form.delivery_method == 'pickup' %} checked{% endif %}>
+          <span><strong>{{ t('m_pickup') }}</strong><small>{{ settings.shop_address }} · {{ t('free') }}</small></span>
+        </label>
+      </fieldset>
+
+      <div class="field">
+        <label for="f-comment">{{ t('f_comment') }} <span class="opt">{{ t('optional') }}</span></label>
+        <textarea id="f-comment" class="input" name="comment" rows="2" placeholder="{{ t('f_comment_ph') }}" maxlength="1000">{{ form.comment }}</textarea>
+      </div>
+
+      <div class="info">{{ icon('info', 20) }}<p>{{ t('pay_note') }}</p></div>
+
+      <div class="field{% if form.errors.get('consent') %} has-error{% endif %}">
+        <label class="check">
+          <input type="checkbox" name="consent" value="1"{% if form.consent %} checked{% endif %} required{{ described('consent') }}>
+          <span>{{ t('consent') }}</span>
+        </label>
+        {{ err('consent') }}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="height: 56px; font-size: 17px">{{ t('place_order') }} {{ icon('arrow', 20, 2) }}</button>
+      <p class="center-note">{{ t('after_order') }}</p>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

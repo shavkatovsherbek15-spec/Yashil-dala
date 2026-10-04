@@ -1,0 +1,13 @@
+{% from "partials/icons.html" import product_media %}
+{% macro product_card(p) -%}
+{%- set bg, fg, _ = cat_style(p.category.slug) -%}
+<a href="/mahsulot/{{ p.slug }}" class="card pcard">
+  <div class="pcard-media" style="background: {{ bg }}; color: {{ fg }}">{{ product_media(p) }}</div>
+  <div class="pcard-body">
+    <span class="pill" style="background: {{ bg }}; color: {{ fg }}">{{ p.category.t('short', lang) }}</span>
+    <span class="pcard-name">{{ p.t('name', lang) }}</span>
+    <span class="pcard-packs">{{ p.variants|map(attribute='pack_label')|join(' · ') }}</span>
+    <span class="pcard-price">{{ money(p.min_price) }}</span>
+  </div>
+</a>
+{%- endmacro %}

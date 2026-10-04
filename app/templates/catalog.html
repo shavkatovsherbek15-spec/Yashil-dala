@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "partials/icons.html" import icon %}
+{% from "partials/product_card.html" import product_card with context %}
+{% block title %}{{ t('catalog_title') }} — {{ settings.shop_name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="page-head" style="padding-bottom: 0">
+    <div class="page-title-row">
+      <h1>{{ t('catalog_title') }}</h1>
+      <span>{{ t('n_products', n=products|length) }}</span>
+    </div>
+  </section>
+
+  <form class="catalog-tools" action="/katalog" method="get" data-autosubmit>
+    {% if category %}<input type="hidden" name="cat" value="{{ category.slug }}">{% endif %}
+    <label class="search">
+      <span class="sr-only">{{ t('search_label') }}</span>
+      <span style="color: var(--icon)">{{ icon('search', 20, 2) }}</span>
+      <input class="input" type="search" name="q" value="{{ q }}" placeholder="{{ t('search_placeholder') }}">
+    </label>
+
+    <nav class="tabs" aria-label="{{ t('category_group') }}">
+      <a href="{{ url_with(cat=None) }}" class="tab" aria-current="{{ 'false' if category else 'true' }}">{{ t('all') }}</a>
+      {% for c in categories %}
+      <a href="{{ url_with(cat=c.slug) }}" class="tab" aria-current="{{ 'true' if category and category.id == c.id else 'false' }}">{{ c.t('short', lang) }}</a>
+      {% endfor %}
+    </nav>
+
+    <div class="filters">
+      <label class="filter">
+        <span class="sr-only">{{ t('filter_crop') }}</span>
+        <select name="crop">
+          <option value="">{{ t('filter_crop') }}: {{ t('all') }}</option>
+          {% for c in crops %}
+          <option value="{{ c.slug }}"{% if crop and crop.id == c.id %} selected{% endif %}>{{ t('filter_crop') }}: {{ c.t('name', lang) }}</option>
+          {% endfor %}
+        </select>
+        {{ icon('chevron-down', 16, 2) }}
+      </label>
+      <label class="filter">
+        <span class="sr-only">{{ t('filter_sort') }}</span>
+        <select name="sort">
+          {% for s in sorts %}
+          <option value="{{ s }}"{% if s == sort %} selected{% endif %}>{{ t('filter_sort') }}: {{ t('sort_' ~ s) }}</option>
+          {% endfor %}
+        </select>
+        {{ icon('chevron-down', 16, 2) }}
+      </label>
+    </div>
+    <button type="submit" class="btn btn-ghost btn-sm noscript-only">{{ t('apply') }}</button>
+
+    <a href="/tanlash" class="hint-link">
+      <span class="hint-icon">{{ icon('sprout') }}</span>
+      <span class="hint-body">
+        <strong>{{ t('catalog_help_h') }}</strong>
+        <span>{{ t('catalog_help_p') }}</span>
+      </span>
+      {{ icon('chevron', 20, 2) }}
+    </a>
+  </form>
+
+  <section class="catalog-results">
+    {% if products %}
+    <div class="product-grid">
+      {% for p in products %}{{ product_card(p) }}{% endfor %}
+    </div>
+    {% else %}
+    <p class="panel-empty">{{ t('catalog_empty') }}</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

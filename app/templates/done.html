@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "partials/icons.html" import icon %}
+{% block title %}{{ t('done_title') }} — {{ settings.shop_name }}{% endblock %}
+{% block content %}
+<div class="container narrow" style="margin-left: auto; margin-right: auto">
+  <section class="done-head">
+    <span class="done-icon">{{ icon('check', 36, 2.4) }}</span>
+    <h1>{{ t('done_title') }}</h1>
+    <p>{{ t('done_p', number='<strong>#' ~ order.number ~ '</strong>')|safe }}</p>
+  </section>
+
+  <section class="card done-card">
+    <h2>{{ t('done_details') }}</h2>
+    {% for item in order.items %}
+    <div class="done-line">
+      <span>{{ item.variant.product.t('name', lang) }}, {{ item.variant.pack_label }} × {{ item.qty }}</span>
+      <span>{{ money(item.unit_price * item.qty if item.unit_price else None) }}</span>
+    </div>
+    {% endfor %}
+    <div class="hr"></div>
+    <div class="done-meta">
+      {% if order.delivery_method.value == 'delivery' %}
+      <span>{{ t('done_delivery', region=region_name(order.region, lang), address=order.address) }}</span>
+      {% else %}
+      <span>{{ t('done_pickup', address=settings.shop_address) }}</span>
+      {% endif %}
+      <span>{{ t('done_payment') }}</span>
+    </div>
+    <div class="summary-total" style="padding-top: 4px"><span>{{ t('total') }}</span><span>{{ money(order.total if order.total else None) }}</span></div>
+  </section>
+
+  <section class="done-actions">
+    <a href="/katalog" class="btn btn-primary">{{ t('continue_shopping') }}</a>
+    <a href="/" class="btn btn-ghost">{{ t('home') }}</a>
+    <p>{{ t('questions') }} <a href="tel:{{ settings.shop_phone|replace(' ', '') }}" style="font-weight: 600">{{ settings.shop_phone }}</a></p>
+  </section>
+</div>
+{% endblock %}

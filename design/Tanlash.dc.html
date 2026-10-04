@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Muammo bo‘yicha tanlash</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1E5B3A}a:hover{color:#143F28}
+button,input,select,textarea{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 1640px; box-sizing: border-box; background: #F4F5EF; font-family: 'Onest', sans-serif; color: #16241B; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 64px; padding: 0 8px 0 16px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DCE2D8; flex-shrink: 0">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #16241B">
+<span style="width: 36px; height: 36px; border-radius: 10px; background: #1E5B3A; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20c0-9 5-14.5 15-16-1 9.5-6.5 15-15 16z"></path><path d="M5 20l8-8"></path></svg>
+</span>
+<span style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: -0.01em">Yashil Dala</span>
+</a>
+<div style="display: flex; align-items: center; gap: 2px">
+<button type="button" aria-label="Tilni tanlash: o‘zbekcha yoki ruscha" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #16241B; font-size: 14px; font-weight: 700; cursor: pointer">UZ <span style="color: #5E6B62; font-weight: 500">/ RU</span></button>
+<a href="Buyurtma.dc.html" aria-label="Savatcha: 2 ta mahsulot" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #16241B">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="17" cy="20" r="1.4"></circle></svg>
+<span style="position: absolute; top: 5px; right: 3px; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 9px; background: #E7A93B; color: #16241B; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span>
+</a>
+<button type="button" aria-label="Menyu" style="width: 44px; height: 44px; border: 0; background: transparent; color: #16241B; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+</button>
+</div>
+</header>
+
+<section style="padding: 24px 16px 20px; display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 24px; line-height: 1.22; letter-spacing: -0.02em">Muammo bo‘yicha tanlash</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #4D5C52">Ekin va muammoni belgilang. Faqat shu ekin uchun ro‘yxatdan o‘tgan vositalar ko‘rsatiladi.</p>
+<div style="display: flex; gap: 8px; margin-top: 4px">
+<sc-for list="{{steps}}" as="st" hint-placeholder-count="3">
+<div style="flex: 1; display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 12px">
+<span style="width: 26px; height: 26px; flex-shrink: 0; box-sizing: border-box; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; background: {{st.bg}}; color: {{st.fg}}; border: 1.5px solid {{st.bd}}">{{st.num}}</span>
+<span style="font-size: 14px; font-weight: 600; color: {{st.lab}}">{{st.label}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="margin: 0 16px; padding: 16px; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">1. Qaysi ekin?</h2>
+<sc-if value="{{hasCrop}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{reset}}" style="height: 44px; padding: 0 4px; border: 0; background: transparent; color: #1E5B3A; font-size: 14px; font-weight: 600; cursor: pointer">Qaytadan</button>
+</sc-if>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{crops}}" as="c" hint-placeholder-count="8">
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="height: 52px; padding: 0 12px; display: flex; align-items: center; gap: 10px; border-radius: 14px; border: 1.5px solid {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}; font-size: 15px; font-weight: 600; text-align: left; cursor: pointer">
+<span style="width: 12px; height: 12px; flex-shrink: 0; border-radius: 6px; background: {{c.dot}}; box-shadow: 0 0 0 2px {{c.ring}}"></span>
+<span style="flex: 1">{{c.name}}</span>
+<sc-if value="{{c.on}}" hint-placeholder-val="{{false}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+</sc-if>
+</button>
+</sc-for>
+</div>
+</section>
+
+<section style="margin: 12px 16px 0; padding: 16px; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">2. Qanday muammo?</h2>
+<sc-if value="{{hasCrop}}" hint-placeholder-val="{{true}}">
+<span style="font-size: 14px; color: #4D5C52">{{cropName}} uchun</span>
+</sc-if>
+</div>
+<sc-if value="{{noCrop}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0; padding: 14px; border-radius: 12px; background: #F4F5EF; font-size: 15px; color: #4D5C52">Avval yuqoridan ekinni tanlang.</p>
+</sc-if>
+<sc-if value="{{hasCrop}}" hint-placeholder-val="{{true}}">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{problems}}" as="pr" hint-placeholder-count="6">
+<button type="button" onClick="{{pr.pick}}" aria-pressed="{{pr.pressed}}" style="min-height: 58px; padding: 8px 12px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; border-radius: 12px; border: 1.5px solid {{pr.bd}}; background: {{pr.bg}}; color: {{pr.fg}}; text-align: left; cursor: pointer">
+<span style="font-size: 15px; font-weight: 600; line-height: 1.25">{{pr.name}}</span>
+<span style="font-size: 12px; font-weight: 500; color: {{pr.sub}}">{{pr.type}}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</section>
+
+<section style="margin: 12px 16px 0; padding: 16px; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 700">3. Mos mahsulotlar</h2>
+<sc-if value="{{hasProblem}}" hint-placeholder-val="{{true}}">
+<span style="font-size: 14px; color: #4D5C52">{{cropName}} · {{problemName}} — {{resultCount}} ta topildi</span>
+</sc-if>
+</div>
+
+<sc-if value="{{waiting}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0; padding: 14px; border-radius: 12px; background: #F4F5EF; font-size: 15px; line-height: 1.5; color: #4D5C52">Ekin va muammoni tanlang — mos vositalar shu yerda chiqadi.</p>
+</sc-if>
+
+<sc-if value="{{hasResults}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{results}}" as="p" hint-placeholder-count="1">
+<div style="display: flex; gap: 12px; padding: 12px; border: 1px solid #DCE2D8; border-radius: 16px; background: #FFFFFF">
+<div style="width: 88px; height: 120px; flex-shrink: 0; border-radius: 12px; background: {{p.tint}}; color: {{p.fg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{p.isBottle}}" hint-placeholder-val="{{true}}">
+<svg width="40" height="60" viewBox="0 0 56 84" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><rect x="21" y="3" width="14" height="9" rx="2"></rect><path d="M23 12v5c0 3-11 6-11 15v42a6 6 0 0 0 6 6h20a6 6 0 0 0 6-6V32c0-9-11-12-11-15v-5"></path><rect x="17" y="42" width="22" height="20" rx="3"></rect></svg>
+</sc-if>
+<sc-if value="{{p.isBag}}" hint-placeholder-val="{{false}}">
+<svg width="46" height="60" viewBox="0 0 64 84" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><path d="M14 8h36l-3 8 5 58a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4l5-58-3-8z"></path><path d="M17 16h30"></path><rect x="20" y="36" width="24" height="22" rx="3"></rect></svg>
+</sc-if>
+<sc-if value="{{p.isTube}}" hint-placeholder-val="{{false}}">
+<svg width="28" height="62" viewBox="0 0 40 88" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="2" width="12" height="10" rx="2"></rect><path d="M12 12h16l4 8v56l-4 8H12l-4-8V20l4-8z"></path><path d="M8 76h24"></path><rect x="13" y="32" width="14" height="24" rx="2"></rect></svg>
+</sc-if>
+</div>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: {{p.tint}}; color: {{p.fg}}; font-size: 12px; font-weight: 600">{{p.catLabel}}</span>
+<span style="font-size: 16px; font-weight: 600; line-height: 1.3">{{p.name}}</span>
+<span style="font-size: 13px; color: #4D5C52">{{p.pack}} · Doza: [doza]</span>
+<div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-size: 15px; font-weight: 700">[narx] so‘m</span>
+<a href="Mahsulot.dc.html" style="height: 44px; padding: 0 14px; border-radius: 12px; background: #1E5B3A; color: #FFFFFF; font-size: 14px; font-weight: 600; display: flex; align-items: center; text-decoration: none">Ko‘rish</a>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+<div style="padding: 16px; border-radius: 14px; background: #FBF0D9; display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4A3A1A">Bu muammo uchun hozircha vositamiz yo‘q. Mutaxassisga yozing — boshqa yechim topamiz.</p>
+<a href="Bot.dc.html" style="align-self: flex-start; height: 44px; padding: 0 16px; border-radius: 12px; background: #1E5B3A; color: #FFFFFF; font-size: 15px; font-weight: 600; display: flex; align-items: center; text-decoration: none">Mutaxassisga yozish</a>
+</div>
+</sc-if>
+</section>
+
+<section style="margin: 24px 16px 32px; padding: 16px; border-radius: 16px; background: #E3EFE5; display: flex; align-items: center; gap: 12px">
+<p style="margin: 0; flex: 1; font-size: 14px; line-height: 1.45; color: #1E3A28">Muammoingiz ro‘yxatda yo‘qmi? Rasmini yuboring — mutaxassis javob beradi.</p>
+<a href="Bot.dc.html" aria-label="Telegramda yozish" style="width: 48px; height: 48px; flex-shrink: 0; border-radius: 14px; background: #1E5B3A; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L3 10.5l7 2.5 2.5 7L21 3z"></path><path d="M10 13l4.5-4.5"></path></svg>
+</a>
+</section>
+
+<footer style="margin-top: auto; padding: 24px 16px; background: #16241B; color: #E4EAE2; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 15px; color: #FFFFFF">Yashil Dala</span>
+<span style="font-size: 14px; color: #B9C4BC">+998 [raqam] · [manzil]</span>
+<span style="font-size: 13px; color: #B9C4BC">© 2026 Yashil Dala</span>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1640}}'>
+class Component extends DCLogic {
+  state = { crop: 'pomidor', problem: 'shira' };
+
+  data() {
+    return {
+      crops: [
+        { id: 'pomidor', name: 'Pomidor', dot: '#D2452F' },
+        { id: 'bodring', name: 'Bodring', dot: '#4F8A3A' },
+        { id: 'olma', name: 'Olma', dot: '#B8323A' },
+        { id: 'uzum', name: 'Uzum', dot: '#6B3F7A' },
+        { id: 'kartoshka', name: 'Kartoshka', dot: '#B08A4E' },
+        { id: 'goza', name: 'G‘o‘za', dot: '#D9D2BC' },
+        { id: 'piyoz', name: 'Piyoz', dot: '#C9853A' },
+        { id: 'uy', name: 'Uy-joy', dot: '#5C6B78' }
+      ],
+      problems: {
+        shira: { name: 'Shira', type: 'Zararkunanda' },
+        trips: { name: 'Trips', type: 'Zararkunanda' },
+        kana: { name: 'O‘rgimchakkana', type: 'Zararkunanda' },
+        qurt: { name: 'Olma qurti', type: 'Zararkunanda' },
+        kolorado: { name: 'Kolorado qo‘ng‘izi', type: 'Zararkunanda' },
+        unshudring: { name: 'Un-shudring', type: 'Kasallik' },
+        fitoftoroz: { name: 'Fitoftoroz', type: 'Kasallik' },
+        chirish: { name: 'Kulrang chirish', type: 'Kasallik' },
+        sekin: { name: 'Sekin o‘sish', type: 'Oziqlanish' },
+        sargayish: { name: 'Barglar sarg‘ayishi', type: 'Oziqlanish' },
+        gul: { name: 'Gul va tugun kam', type: 'Oziqlanish' },
+        tarakan: { name: 'Tarakan', type: 'Uy hasharoti' },
+        chumoli: { name: 'Chumoli', type: 'Uy hasharoti' }
+      },
+      cropProblems: {
+        pomidor: ['shira', 'trips', 'kana', 'fitoftoroz', 'unshudring', 'sekin', 'sargayish', 'gul'],
+        bodring: ['shira', 'trips', 'kana', 'unshudring', 'sekin', 'sargayish'],
+        olma: ['shira', 'kana', 'qurt', 'unshudring', 'sekin', 'gul'],
+        uzum: ['shira', 'kana', 'unshudring', 'chirish', 'sekin'],
+        kartoshka: ['kolorado', 'fitoftoroz', 'sekin', 'sargayish'],
+        goza: ['kana', 'sekin', 'sargayish'],
+        piyoz: ['sekin', 'sargayish'],
+        uy: ['tarakan', 'chumoli']
+      },
+      cats: {
+        ogit: { catLabel: 'O‘g‘it va stimulyator', tint: '#E3EFE5', fg: '#1E5B3A' },
+        himoya: { catLabel: 'O‘simlik himoyasi', tint: '#FBF0D9', fg: '#7A4A06' },
+        uy: { catLabel: 'Uy uchun', tint: '#E5ECF3', fg: '#24486B' }
+      },
+      products: [
+        { id: 'p1', name: 'O‘sish stimulyatori', cat: 'ogit', shape: 'bottle', pack: '1 L', crops: ['pomidor', 'bodring', 'olma', 'uzum', 'kartoshka', 'goza', 'piyoz'], problems: ['sekin', 'gul'] },
+        { id: 'p2', name: 'NPK kompleks o‘g‘it 20-20-20', cat: 'ogit', shape: 'bag', pack: '1 kg', crops: ['pomidor', 'bodring', 'olma', 'uzum', 'kartoshka', 'goza', 'piyoz'], problems: ['sargayish', 'sekin'] },
+        { id: 'p3', name: 'Shiraga qarshi insektitsid', cat: 'himoya', shape: 'bottle', pack: '250 ml', crops: ['pomidor', 'bodring', 'olma', 'uzum'], problems: ['shira', 'trips'] },
+        { id: 'p4', name: 'Kanaga qarshi akaritsid', cat: 'himoya', shape: 'bottle', pack: '250 ml', crops: ['pomidor', 'bodring', 'olma', 'uzum', 'goza'], problems: ['kana'] },
+        { id: 'p5', name: 'Zamburug‘ kasalliklariga qarshi fungitsid', cat: 'himoya', shape: 'bottle', pack: '500 ml', crops: ['pomidor', 'bodring', 'olma', 'uzum', 'kartoshka'], problems: ['unshudring', 'fitoftoroz', 'chirish'] },
+        { id: 'p6', name: 'Tarakanga qarshi gel', cat: 'uy', shape: 'tube', pack: '30 g', crops: ['uy'], problems: ['tarakan', 'chumoli'] }
+      ]
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const d = this.data();
+
+    const crops = d.crops.map((c) => {
+      const on = c.id === s.crop;
+      return {
+        ...c,
+        on: on,
+        pressed: on ? 'true' : 'false',
+        pick: () => this.setState({ crop: c.id, problem: null }),
+        bg: on ? '#1E5B3A' : '#FFFFFF',
+        fg: on ? '#FFFFFF' : '#16241B',
+        bd: on ? '#1E5B3A' : '#DCE2D8',
+        ring: on ? '#FFFFFF' : '#FFFFFF'
+      };
+    });
+
+    const problems = (s.crop ? d.cropProblems[s.crop] : []).map((id) => {
+      const p = d.problems[id];
+      const on = id === s.problem;
+      return {
+        id: id,
+        name: p.name,
+        type: p.type,
+        pressed: on ? 'true' : 'false',
+        pick: () => this.setState({ problem: id }),
+        bg: on ? '#1E5B3A' : '#FFFFFF',
+        fg: on ? '#FFFFFF' : '#16241B',
+        sub: on ? '#CFE3D5' : '#4D5C52',
+        bd: on ? '#1E5B3A' : '#DCE2D8'
+      };
+    });
+
+    const results = (s.crop && s.problem)
+      ? d.products
+          .filter((p) => p.crops.indexOf(s.crop) !== -1 && p.problems.indexOf(s.problem) !== -1)
+          .map((p) => ({
+            ...p,
+            ...d.cats[p.cat],
+            isBottle: p.shape === 'bottle',
+            isBag: p.shape === 'bag',
+            isTube: p.shape === 'tube'
+          }))
+      : [];
+
+    const look = (done, active) => done
+      ? { bg: '#1E5B3A', fg: '#FFFFFF', bd: '#1E5B3A', lab: '#16241B' }
+      : active
+        ? { bg: '#E7A93B', fg: '#16241B', bd: '#E7A93B', lab: '#16241B' }
+        : { bg: '#FFFFFF', fg: '#4D5C52', bd: '#C9D2C5', lab: '#4D5C52' };
+
+    const steps = [
+      { num: '1', label: 'Ekin', ...look(!!s.crop, !s.crop) },
+      { num: '2', label: 'Muammo', ...look(!!s.problem, !!s.crop && !s.problem) },
+      { num: '3', label: 'Natija', ...look(false, !!s.problem) }
+    ];
+
+    const cropObj = d.crops.find((c) => c.id === s.crop);
+
+    return {
+      steps: steps,
+      crops: crops,
+      problems: problems,
+      results: results,
+      hasCrop: !!s.crop,
+      noCrop: !s.crop,
+      hasProblem: !!s.problem,
+      waiting: !s.problem,
+      hasResults: !!s.problem && results.length > 0,
+      noResults: !!s.problem && results.length === 0,
+      cropName: cropObj ? cropObj.name : '',
+      problemName: s.problem ? d.problems[s.problem].name : '',
+      resultCount: results.length,
+      reset: () => this.setState({ crop: null, problem: null })
+    };
+  }
+}
+</script>
+</body>
+</html>

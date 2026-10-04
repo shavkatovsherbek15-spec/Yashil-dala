@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ t('not_found_title') }} — {{ settings.shop_name }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="empty-state">
+    <h1 class="head" style="font-size: 26px">{{ t('not_found_title') }}</h1>
+    <p class="muted">{{ t('not_found_p') }}</p>
+    <a href="/" class="btn btn-primary">{{ t('home') }}</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Katalog</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=Unbounded:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1E5B3A}a:hover{color:#143F28}
+button,input,select,textarea{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 1600px; box-sizing: border-box; background: #F4F5EF; font-family: 'Onest', sans-serif; color: #16241B; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 64px; padding: 0 8px 0 16px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DCE2D8; flex-shrink: 0">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #16241B">
+<span style="width: 36px; height: 36px; border-radius: 10px; background: #1E5B3A; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20c0-9 5-14.5 15-16-1 9.5-6.5 15-15 16z"></path><path d="M5 20l8-8"></path></svg>
+</span>
+<span style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: -0.01em">Yashil Dala</span>
+</a>
+<div style="display: flex; align-items: center; gap: 2px">
+<button type="button" aria-label="Tilni tanlash: o‘zbekcha yoki ruscha" style="height: 44px; padding: 0 8px; border: 0; background: transparent; color: #16241B; font-size: 14px; font-weight: 700; cursor: pointer">UZ <span style="color: #5E6B62; font-weight: 500">/ RU</span></button>
+<a href="Buyurtma.dc.html" aria-label="Savatcha: 2 ta mahsulot" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #16241B">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"></path><circle cx="10" cy="20" r="1.4"></circle><circle cx="17" cy="20" r="1.4"></circle></svg>
+<span style="position: absolute; top: 5px; right: 3px; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 9px; background: #E7A93B; color: #16241B; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span>
+</a>
+<button type="button" aria-label="Menyu" style="width: 44px; height: 44px; border: 0; background: transparent; color: #16241B; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+</button>
+</div>
+</header>
+
+<section style="padding: 24px 16px 0; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<h1 style="margin: 0; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 26px; letter-spacing: -0.02em">Katalog</h1>
+<span style="font-size: 14px; color: #4D5C52">6 ta mahsulot</span>
+</div>
+<label style="position: relative; display: flex; align-items: center">
+<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Mahsulot qidirish</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5E6B62" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 14px"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<input type="search" placeholder="Mahsulot yoki muammo nomi" style="width: 100%; height: 48px; padding: 0 14px 0 44px; box-sizing: border-box; border: 1.5px solid #C9D2C5; border-radius: 12px; background: #FFFFFF; font-size: 16px; color: #16241B">
+</label>
+<div role="group" aria-label="Kategoriya" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px">
+<button type="button" aria-pressed="true" style="height: 44px; padding: 0 16px; flex-shrink: 0; border-radius: 999px; border: 1.5px solid #1E5B3A; background: #1E5B3A; color: #FFFFFF; font-size: 15px; font-weight: 600; cursor: pointer">Hammasi</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0 16px; flex-shrink: 0; border-radius: 999px; border: 1.5px solid #DCE2D8; background: #FFFFFF; color: #16241B; font-size: 15px; font-weight: 600; cursor: pointer">O‘g‘itlar</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0 16px; flex-shrink: 0; border-radius: 999px; border: 1.5px solid #DCE2D8; background: #FFFFFF; color: #16241B; font-size: 15px; font-weight: 600; cursor: pointer">Himoya</button>
+<button type="button" aria-pressed="false" style="height: 44px; padding: 0 16px; flex-shrink: 0; border-radius: 999px; border: 1.5px solid #DCE2D8; background: #FFFFFF; color: #16241B; font-size: 15px; font-weight: 600; cursor: pointer">Uy uchun</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button type="button" style="height: 44px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 6px; border-radius: 12px; border: 1.5px solid #DCE2D8; background: #FFFFFF; color: #16241B; font-size: 14px; cursor: pointer"><span>Ekin: <strong>Hammasi</strong></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+<button type="button" style="height: 44px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 6px; border-radius: 12px; border: 1.5px solid #DCE2D8; background: #FFFFFF; color: #16241B; font-size: 14px; cursor: pointer"><span>Saralash: <strong>Ommabop</strong></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<a href="Tanlash.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px; background: #E3EFE5; color: #1E3A28; text-decoration: none">
+<span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; background: #1E5B3A; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8"></path><path d="M12 13c0-4-3-7-8-7 0 4 3 7 8 7z"></path><path d="M12 11c0-4 3-7 8-7 0 4-3 7-8 7z"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 15px; font-weight: 600">Qaysi dori kerakligini bilmaysizmi?</span>
+<span style="font-size: 14px; color: #2F4A38">Ekin va muammo bo‘yicha tanlang</span>
+</span>
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</section>
+
+<section style="padding: 20px 16px 40px">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+
+<a href="Mahsulot.dc.html" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 16px; overflow: hidden; text-decoration: none; color: #16241B">
+<div style="height: 128px; background: #FBF0D9; color: #7A4A06; display: flex; align-items: center; justify-content: center"><svg width="56" height="84" viewBox="0 0 56 84" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="21" y="3" width="14" height="9" rx="2"></rect><path d="M23 12v5c0 3-11 6-11 15v42a6 6 0 0 0 6 6h20a6 6 0 0 0 6-6V32c0-9-11-12-11-15v-5"></path><rect x="17" y="42" width="22" height="20" rx="3"></rect></svg></div>
+<div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #FBF0D9; color: #7A4A06; font-size: 12px; font-weight: 600">Himoya</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3">Shiraga qarshi insektitsid</span>
+<span style="font-size: 13px; color: #4D5C52">250 ml · 1 L · 5 L</span>
+<span style="margin-top: auto; padding-top: 4px; font-size: 16px; font-weight: 700">[narx] so‘m</span>
+</div>
+</a>
+
+<a href="Mahsulot.dc.html" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 16px; overflow: hidden; text-decoration: none; color: #16241B">
+<div style="height: 128px; background: #E3EFE5; color: #1E5B3A; display: flex; align-items: center; justify-content: center"><svg width="56" height="84" viewBox="0 0 56 84" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="21" y="3" width="14" height="9" rx="2"></rect><path d="M23 12v5c0 3-11 6-11 15v42a6 6 0 0 0 6 6h20a6 6 0 0 0 6-6V32c0-9-11-12-11-15v-5"></path><rect x="17" y="42" width="22" height="20" rx="3"></rect></svg></div>
+<div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #E3EFE5; color: #1E5B3A; font-size: 12px; font-weight: 600">O‘g‘it</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3">O‘sish stimulyatori</span>
+<span style="font-size: 13px; color: #4D5C52">1 L · 5 L</span>
+<span style="margin-top: auto; padding-top: 4px; font-size: 16px; font-weight: 700">[narx] so‘m</span>
+</div>
+</a>
+
+<a href="Mahsulot.dc.html" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 16px; overflow: hidden; text-decoration: none; color: #16241B">
+<div style="height: 128px; background: #E3EFE5; color: #1E5B3A; display: flex; align-items: center; justify-content: center"><svg width="64" height="84" viewBox="0 0 64 84" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M14 8h36l-3 8 5 58a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4l5-58-3-8z"></path><path d="M17 16h30"></path><rect x="20" y="36" width="24" height="22" rx="3"></rect></svg></div>
+<div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #E3EFE5; color: #1E5B3A; font-size: 12px; font-weight: 600">O‘g‘it</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3">NPK kompleks o‘g‘it 20-20-20</span>
+<span style="font-size: 13px; color: #4D5C52">1 kg · 10 kg</span>
+<span style="margin-top: auto; padding-top: 4px; font-size: 16px; font-weight: 700">[narx] so‘m</span>
+</div>
+</a>
+
+<a href="Mahsulot.dc.html" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 16px; overflow: hidden; text-decoration: none; color: #16241B">
+<div style="height: 128px; background: #FBF0D9; color: #7A4A06; display: flex; align-items: center; justify-content: center"><svg width="56" height="84" viewBox="0 0 56 84" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="21" y="3" width="14" height="9" rx="2"></rect><path d="M23 12v5c0 3-11 6-11 15v42a6 6 0 0 0 6 6h20a6 6 0 0 0 6-6V32c0-9-11-12-11-15v-5"></path><rect x="17" y="42" width="22" height="20" rx="3"></rect></svg></div>
+<div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #FBF0D9; color: #7A4A06; font-size: 12px; font-weight: 600">Himoya</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3">Kanaga qarshi akaritsid</span>
+<span style="font-size: 13px; color: #4D5C52">250 ml · 1 L</span>
+<span style="margin-top: auto; padding-top: 4px; font-size: 16px; font-weight: 700">[narx] so‘m</span>
+</div>
+</a>
+
+<a href="Mahsulot.dc.html" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 16px; overflow: hidden; text-decoration: none; color: #16241B">
+<div style="height: 128px; background: #FBF0D9; color: #7A4A06; display: flex; align-items: center; justify-content: center"><svg width="56" height="84" viewBox="0 0 56 84" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="21" y="3" width="14" height="9" rx="2"></rect><path d="M23 12v5c0 3-11 6-11 15v42a6 6 0 0 0 6 6h20a6 6 0 0 0 6-6V32c0-9-11-12-11-15v-5"></path><rect x="17" y="42" width="22" height="20" rx="3"></rect></svg></div>
+<div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #FBF0D9; color: #7A4A06; font-size: 12px; font-weight: 600">Himoya</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3">Zamburug‘ kasalliklariga qarshi fungitsid</span>
+<span style="font-size: 13px; color: #4D5C52">500 ml · 1 L</span>
+<span style="margin-top: auto; padding-top: 4px; font-size: 16px; font-weight: 700">[narx] so‘m</span>
+</div>
+</a>
+
+<a href="Mahsulot.dc.html" style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DCE2D8; border-radius: 16px; overflow: hidden; text-decoration: none; color: #16241B">
+<div style="height: 128px; background: #E5ECF3; color: #24486B; display: flex; align-items: center; justify-content: center"><svg width="40" height="88" viewBox="0 0 40 88" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="2" width="12" height="10" rx="2"></rect><path d="M12 12h16l4 8v56l-4 8H12l-4-8V20l4-8z"></path><path d="M8 76h24"></path><rect x="13" y="32" width="14" height="24" rx="2"></rect></svg></div>
+<div style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #E5ECF3; color: #24486B; font-size: 12px; font-weight: 600">Uy uchun</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.3">Tarakanga qarshi gel</span>
+<span style="font-size: 13px; color: #4D5C52">30 g</span>
+<span style="margin-top: auto; padding-top: 4px; font-size: 16px; font-weight: 700">[narx] so‘m</span>
+</div>
+</a>
+
+</div>
+</section>
+
+<footer style="margin-top: auto; padding: 24px 16px; background: #16241B; color: #E4EAE2; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 15px; color: #FFFFFF">Yashil Dala</span>
+<span style="font-size: 14px; color: #B9C4BC">+998 [raqam] · [manzil]</span>
+<span style="font-size: 13px; color: #B9C4BC">© 2026 Yashil Dala</span>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

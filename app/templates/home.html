@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% from "partials/icons.html" import icon %}
+{% from "partials/product_card.html" import product_card with context %}
+{% block title %}{{ settings.shop_name }} — {{ t('home_title') }}{% endblock %}
+{% block content %}
+<div class="hero-wrap">
+  <div class="container hero">
+    <div class="hero-text">
+      <span class="eyebrow">{{ t('home_badge') }}</span>
+      <h1>{{ t('home_h1') }}</h1>
+      <p class="hero-lead">{{ t('home_lead') }}</p>
+      <div class="hero-ctas">
+        <a href="/katalog" class="btn btn-primary">{{ t('home_cta_catalog') }}</a>
+        <a href="{{ settings.shop_telegram }}" class="btn btn-ghost" rel="noopener">{{ t('home_cta_expert') }}</a>
+      </div>
+      <div class="hero-checks">
+        <span>{{ icon('check', 18, 2.2) }}{{ t('home_check_registered') }}</span>
+        <span>{{ icon('check', 18, 2.2) }}{{ t('home_check_dose') }}</span>
+        <span>{{ icon('check', 18, 2.2) }}{{ t('home_check_payment') }}</span>
+      </div>
+    </div>
+
+    <form class="picker" action="/tanlash" method="get" data-picker data-problems='{{ crop_problems|tojson }}'>
+      <div class="stack" style="gap: 6px">
+        <h2>{{ t('picker_h2') }}</h2>
+        <p class="picker-lead">{{ t('picker_lead') }}</p>
+      </div>
+      <fieldset>
+        <legend class="picker-label">{{ t('picker_step1') }}</legend>
+        <div class="chips">
+          {% for c in crops %}
+          <label class="chip">
+            <input type="radio" name="crop" value="{{ c.slug }}" required>
+            <span><span class="dot" style="background: {{ c.color }}"></span>{{ c.t('name', lang) }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+      <div class="stack" style="gap: 10px">
+        <label for="picker-problem" class="picker-label">{{ t('picker_step2') }}</label>
+        <select id="picker-problem" name="problem" disabled>
+          <option value="">{{ t('picker_choose_crop_first') }}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-cta">{{ t('picker_find') }} {{ icon('arrow', 20, 2) }}</button>
+    </form>
+  </div>
+</div>
+
+<div class="container">
+  <section class="section" style="padding-top: 0">
+    <h2 class="section-title">{{ t('categories') }}</h2>
+    <div class="cat-list">
+      {% for cat in categories %}
+      {% set bg, fg, ic = cat_style(cat.slug) %}
+      <a href="/katalog?cat={{ cat.slug }}" class="card cat-card">
+        <span class="cat-icon" style="background: {{ bg }}; color: {{ fg }}">{{ icon(ic, 26) }}</span>
+        <span class="cat-body">
+          <span class="cat-name">{{ cat.t('name', lang) }}</span>
+          <span class="cat-desc">{{ cat.t('description', lang) }}</span>
+          <span class="cat-more">{{ t('view') }} {{ icon('arrow', 18, 2) }}</span>
+        </span>
+        <span class="cat-chevron">{{ icon('chevron', 20, 2) }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if popular %}
+  <section class="section">
+    <div class="section-row">
+      <h2 class="section-title">{{ t('popular') }}</h2>
+      <a href="/katalog" class="link-more">{{ t('all') }}</a>
+    </div>
+    <div class="product-grid">
+      {% for p in popular %}{{ product_card(p) }}{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="section" id="biz">
+    <h2 class="section-title">{{ t('why_h2', shop=settings.shop_name) }}</h2>
+    <div class="why-list">
+      <div class="card why">
+        <span class="why-icon">{{ icon('doc') }}</span>
+        <div><h3>{{ t('why1_h') }}</h3><p>{{ t('why1_p') }}</p></div>
+      </div>
+      <div class="card why">
+        <span class="why-icon">{{ icon('drop') }}</span>
+        <div><h3>{{ t('why2_h') }}</h3><p>{{ t('why2_p') }}</p></div>
+      </div>
+      <div class="card why" id="yetkazish">
+        <span class="why-icon">{{ icon('truck') }}</span>
+        <div><h3>{{ t('why3_h') }}</h3><p>{{ t('why3_p') }}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="help">
+    <div>
+      <h2>{{ t('help_h2') }}</h2>
+      <p>{{ t('help_p') }}</p>
+    </div>
+    <div class="help-actions">
+      <a href="tel:{{ settings.shop_phone|replace(' ', '') }}" class="btn btn-primary">{{ icon('phone', 20) }}{{ t('call') }}</a>
+      <a href="{{ settings.shop_telegram }}" class="btn btn-outline" rel="noopener">{{ icon('send', 20) }}{{ t('write_telegram') }}</a>
+    </div>
+  </section>
+</div>
+{% endblock %}
